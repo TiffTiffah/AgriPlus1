@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="tasks.css">
+    <link rel="stylesheet" href="assets/icons/boxicons-master/css/boxicons.css">
+    <link rel="stylesheet" href="assets/icons/fontawesome/css/all.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="script.js"></script>
+    <title>Dashboard</title>
+</head>
+<body>
+       <div class="dash-container">
+        <!-- ----------------------------sidebar-------------------------------- -->
+        <div class="side-bar">
+            <div class="logo">
+                <img src="images/logo.png" alt="logo">
+                <h3>AGRI</h3><span>PLUS</span>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li><a href="dashboard.html"><i class='bx bxs-dashboard'></i>Overview</a></li>
+                    <li><a href="crops.html"><i class='fa-solid fa-seedling'></i>Crops</a></li>
+                    <li><a href="tasks.html" class="active"><i class='bx bx-task'></i>Tasks</a></li>
+                    <li><a href="analytics.html"><i class='bx bxs-report' ></i>Analytics</a></li>
+                    <li><a href="#"><i class='bx bx-help-circle' ></i></i>Help</a></li>
+                </ul>
+        </div>
+       </div> 
+        <!-- ----------------------------main content-------------------------------- -->
+        <div class="main-content">
+
+          <div class="left-side">
+            <div class="t-top">
+
+              <div></div>
+
+              <div id="taskModal" class="modal">
+                <div class="modal-content">
+                  <span class="close" onclick="closeModal()">&times;</span>
+                  <h2>Add New Task</h2>
+                  <form id="taskForm">
+                      <label for="taskName">Task:</label><br>
+                      <input type="text" id="taskName" name="taskName" required><br><br>
+                      
+                      <label for="dueDate">Due Date:</label><br>
+                      <input type="date" id="dueDate" name="dueDate" required><br><br>
+                      
+                      <button type="submit">Add Task</button>
+                  </form>
+                </div>
+              </div>
+
+              <div class="add-task-btn">
+                  <button onclick="openModal()"><i class='bx bx-plus'></i>Add Task</button>
+              </div>
+          </div>
+
+
+              <div class="page-content">
+                  <div class="header">Today Tasks</div>
+              
+                  <div class="tasks-wrapper">
+                    <div class="task">
+                      <input class="task-item" name="task" type="checkbox" id="item-1" checked>
+                      <label for="item-1">
+                        <span class="label-text">Dashboard Design Implementation</span>
+                      </label>
+                      
+                    </div>
+                    <div class="task">
+                      <input class="task-item" name="task" type="checkbox" id="item-2" checked>
+                      <label for="item-2">
+                        <span class="label-text">Create a userflow</span>
+                      </label>
+                      
+                    </div>
+                    <div class="task">
+                      <input class="task-item" name="task" type="checkbox" id="item-3">
+                      <label for="item-3">
+                        <span class="label-text">Application Implementation</span>
+                      </label>
+                      
+                    </div>
+                    <div class="task">
+                      <input class="task-item" name="task" type="checkbox" id="item-4">
+                      <label for="item-4">
+                        <span class="label-text">Create a Dashboard Design</span>
+                      </label>
+                      
+                    </div>
+                    <div class="task">
+                      <input class="task-item" name="task" type="checkbox" id="item-5">
+                      <label for="item-5">
+                        <span class="label-text">Create a Web Application Design</span>
+                      </label>
+                      
+                    </div>
+
+                    
+                    <div class="header upcoming">Upcoming Tasks</div>
+                    <div class="task">
+                      <input class="task-item" name="task" type="checkbox" id="item-7">
+                      <label for="item-7">
+                        <span class="label-text">Dashboard Design Implementation</span>
+                      </label>
+                      
+                    </div>
+                    <div class="task">
+                      <input class="task-item" name="task" type="checkbox" id="item-8">
+                      <label for="item-8">
+                        <span class="label-text">Create a userflow</span>
+                      </label>
+                      
+                    </div>
+                    <div class="task">
+                      <input class="task-item" name="task" type="checkbox" id="item-9">
+                      <label for="item-9">
+                        <span class="label-text">Application Implementation</span>
+                      </label>
+                      
+                    </div>
+                    <div class="task">
+                      <input class="task-item" name="task" type="checkbox" id="item-10">
+                      <label for="item-10">
+                        <span class="label-text">Create a Dashboard Design</span>
+                      </label>
+                      
+                    </div>
+                  </div>
+              </div>
+
+          </div>
+
+
+
+
+                <div class="right-sidey">
+                  <div class="calendar-container">
+                      <div class="calendar-header">
+                        <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                        <div id="month-year"></div>
+                        <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+                      </div>
+                      <div id="calendar"></div>
+                    </div>
+        
+                    <div class="task-progress">
+                      <h4>Tasks Progress</h4>
+                      <div class="chart">
+                          <div id="chart">
+                          </div>
+                      </div>
+        
+                    </div>
+        
+              </div>
+
+        </div>
+
+        
+
+
+
+        <!-- ----------------------------------Right side-------------------------------- -->
+        <!-- <div class="right-side">
+            <div class="calendar-container">
+                <div class="calendar-header">
+                  <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                  <div id="month-year"></div>
+                  <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div id="calendar"></div>
+              </div>
+
+              <div class="task-progress">
+                <h4>Tasks Progress</h4>
+                <div class="chart">
+                    <div id="chart">
+                    </div>
+                </div>
+
+              </div>
+
+        </div> -->
+
+
+
+        <script>
+
+
+
+
+
+
+const calendarHeader = document.getElementById('month-year');
+const calendarContainer = document.getElementById('calendar');
+const prevMonthButton = document.getElementById('prev-month');
+const nextMonthButton = document.getElementById('next-month');
+
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
+
+// Function to generate calendar
+function generateCalendar() {
+  const currentDate = new Date();
+
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  let calendarHTML = '';
+
+  // Add month and year to calendar header
+  calendarHeader.textContent = getMonthName(currentMonth) + ' ' + currentYear;
+
+  // Add days of the week headers
+  calendarHTML += '<div class="day-header">' + daysOfWeek.join('</div><div class="day-header">') + '</div>';
+
+  // Add empty cells for days before the first day of the month
+  for (let i = 0; i < firstDayOfMonth; i++) {
+    calendarHTML += '<div class="day"></div>';
+  }
+
+  // Add days of the month
+  for (let day = 1; day <= daysInMonth; day++) {
+    const isCurrentDay = day === currentDate.getDate() && currentMonth === currentDate.getMonth() && currentYear === currentDate.getFullYear();
+    const classList = isCurrentDay ? 'day current-day' : 'day current-month-day';
+    calendarHTML += `<div class="${classList}">${day}</div>`;
+  }
+
+  calendarContainer.innerHTML = calendarHTML;
+}
+
+// Function to get month name
+function getMonthName(month) {
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  return months[month];
+}
+
+// Event listener for previous month button
+prevMonthButton.addEventListener('click', () => {
+  if (currentMonth === 0) {
+    currentMonth = 11;
+    currentYear--;
+  } else {
+    currentMonth--;
+  }
+  generateCalendar();
+});
+
+// Event listener for next month button
+nextMonthButton.addEventListener('click', () => {
+  if (currentMonth === 11) {
+    currentMonth = 0;
+    currentYear++;
+  } else {
+    currentMonth++;
+  }
+  generateCalendar();
+});
+
+// Generate calendar when the page loads
+generateCalendar();
+
+
+
+
+//task progress chart
+
+var options = {
+    chart: {
+      height: 280,
+      type: "radialBar"
+    },
+    labels: ["Tasks Completed"],
+    series: [80],
+    colors: ["#45a049"],
+    
+    plotOptions: {
+      radialBar: {
+        hollow: {
+          margin: 10,
+          size: "70%"
+        },
+       
+        dataLabels: {
+          showOn: "always",
+          name: {
+            offsetY: -10,
+            show: true,
+            color: "#888",
+            fontSize: "15px",
+            fontFamily: 'Montserrat'
+          },
+          value: {
+            offsetY: -2,
+            color: "#111",
+            fontSize: "15px",
+            fontWeight: "bold",
+            fontFamily: 'Montserrat',
+            show: true
+          },     
+        }
+      }
+    },
+  
+    stroke: {
+      lineCap: "round",
+    },
+
+  };
+  
+  var chart = new ApexCharts(document.querySelector("#chart"), options);
+  
+  chart.render();
+
+
+  //task modal
+   // Get the modal
+   var modal = document.getElementById('taskModal');
+
+// Function to open the modal
+function openModal() {
+    modal.style.display = 'block';
+}
+
+// Function to close the modal
+function closeModal() {
+    modal.style.display = 'none';
+}
+
+// Close the modal when clicking outside of it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        closeModal();
+    }
+}
+
+// Handle form submission
+document.getElementById('taskForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    // Get task details
+    var taskName = document.getElementById('taskName').value;
+    var dueDate = document.getElementById('dueDate').value;
+
+    // You can perform further actions here, such as adding the task to a list or sending it to a server
+
+    // For demonstration purposes, log the task details to the console
+    console.log('Task Name:', taskName);
+    console.log('Due Date:', dueDate);
+
+    // Close the modal
+    closeModal();
+});
+        </script>
+</body>
+</html>

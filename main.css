@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2&family=Montserrat:wght@100&family=Poppins:wght@500&display=swap');
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+   
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color:transparent;
+    /* backdrop-filter: blur(10px); */
+    height: 100px;
+    padding: 0 0 0 50px;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+}
+
+header img {
+    width: 150px; 
+    height: auto; 
+    flex: 1;
+}
+header.scrolled {
+background-color: rgba(255, 255, 255, 0.3);
+backdrop-filter: blur(10px);
+transition: background-color 0.3s;
+}
+.menu{
+flex: 1;
+background-color: plum;
+}
+.menu ul {
+list-style: none;
+margin: 0 auto; /* Center the list horizontally */
+padding: 0;
+text-align: center; /* Center the text within the list items */
+}
+
+.menu ul li {
+display: inline-block;
+margin-left: 20px;
+}
+
+.menu ul li:first-child {
+margin-left: 0; /* Remove left margin from the first list item */
+}
+.menu ul li a {
+text-decoration: none;
+color: #333;
+transition: color 0.3s;
+}
+
+.menu ul li a:hover {
+color: #666;
+}
+
+.logins {
+position: absolute;
+right: 0;
+margin-right: 100px;
+padding: 15px;
+flex: 1;
+}
+
+.logins ul {
+list-style: none;
+margin: 0;
+padding: 0;
+}
+
+.logins ul li {
+display: inline-block;
+margin-left: 20px;
+}
+
+.logins ul li a {
+text-decoration: none;
+color: #333;
+transition: color 0.3s;
+}
+
+.logins ul li a:hover {
+color: #666;
+}
+
+
+
+.banner {
+    justify-content: flex-start;
+    align-items: center;
+    padding: 150px 0 0 100px;
+    text-align: left;
+    width: 40vw;
+    height: 70vh;
+}
+.banner h1 {
+    font-size: 40px;
+    color: #296834;
+    font-family: 'Poppins', sans-serif;
+}
+.banner h3{
+    font-family: 'Montserrat', sans-serif;
+    line-height: 2rem;
+}
+
+.banner p {
+    margin-right: 40px;
+}
+
+button {
+    padding: 15px 20px;
+    border-radius: 7px;
+    font-size: 16px;
+    background-color: #4D9B44; /* Add your preferred button background color */
+    color: #fff; /* Add your preferred button text color */
+    border: none;
+    cursor: pointer;
+}
+button a{
+    text-decoration: none;
+    color: #fff;
+}
+
+button:hover {
+    background-color: #4D9B44; /* Add your preferred button background color on hover */
+}
+
+footer {
+    background-color: #333; /* Add your preferred footer background color */
+    color: #fff; /* Add your preferred footer text color */
+    padding: 20px;
+    text-align: center;
+}

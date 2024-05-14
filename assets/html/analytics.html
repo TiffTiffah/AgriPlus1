@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="analytics.css">
+    <link rel="stylesheet" href="assets/icons/boxicons-master/css/boxicons.css">
+    <link rel="stylesheet" href="assets/icons/fontawesome/css/all.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="script.js"></script>
+    <title>Dashboard</title>
+</head>
+<body>
+       <div class="dash-container">
+        <!-- ----------------------------sidebar-------------------------------- -->
+        <div class="side-bar">
+            <div class="logo">
+                <img src="images/logo.png" alt="logo">
+                <h3>AGRI</h3><span>PLUS</span>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li><a href="dashboard.html" ><i class='bx bxs-dashboard'></i>Overview</a></li>
+                    <li><a href="crops.html"><i class='fa-solid fa-seedling'></i>Crops</a></li>
+                    <li><a href="tasks.html"><i class='bx bx-task'></i>Tasks</a></li>
+                    <li><a href="analytics.html"  class="active"><i class='bx bxs-report' ></i>Analytics</a></li>
+                    <li><a href="#"><i class='bx bx-help-circle' ></i></i>Help</a></li>
+                </ul>
+        </div>
+       </div> 
+        <!-- ----------------------------main content-------------------------------- -->
+        <div class="main-content">
+
+            <div class="top">
+                <div class="crop-dist">
+                    <h4>Crops Distribution</h4>
+                    <canvas id="cropDistributionChart" width="250" height="250"></canvas>
+                </div>
+                <div class="line-chart">
+                    <h4>Line Chart for Expected Yields of All Crops</h4>
+                    <canvas id="cropChart" width="400" height="150"></canvas>
+                </div>
+
+            </div>
+            <div class="down">
+
+                <div class="bar-chart">
+                    <h4>Bar Chart for Last Years Yield Compared to Expected Yield</h4>
+                    <canvas id="yieldComparisonChart" width="800" height="200"></canvas>
+                </div>
+
+            </div>
+
+
+        </div>
+
+<script>
+              // Sample data for crop distribution
+const cropDistributionData = {
+    labels: ['Wheat', 'Corn', 'Barley', 'Maize', 'Soybeans'],
+    datasets: [{
+        data: [20, 15, 25, 10, 30], // Sample data percentages
+        backgroundColor: [
+            'rgb(69, 160, 73,0.5)',
+            'rgb(59, 200, 50,0.5)',
+            'rgb(31, 143, 59,0.5)',
+            'rgba(41, 104, 52,0.5)',
+            'rgb(227, 246, 226)'
+        ],
+        borderColor: [
+            'rgb(69, 160, 73)',
+            'rgb(59, 255, 56)',
+            'rgb(31, 143, 59)',
+            'rgb(69, 160, 73)',
+            'rgb(227, 246, 226)'
+        ],
+        borderWidth: 1 // Set border width to 1 for a thin line
+    }]
+};
+
+// Get the canvas element
+const ctx = document.getElementById('cropDistributionChart').getContext('2d');
+
+// Create the Donut chart
+const cropDistributionChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: cropDistributionData,
+    options: {
+        responsive: false, // Ensure the chart is not responsive
+        cutout: 60, // Set the cutout percentage to create a thin donut
+        "plugins": {
+            legend: {
+            display: true,
+            position: 'bottom',
+            align: 'start', // Align text to the left
+
+            labels: {
+                padding: 10, // Add padding to the legend
+                boxWidth: 10, // Reduce the width of the legend color box
+                font: {
+                    size: 12 // Adjust font size
+                }
+            }
+        }
+        },
+        title: {
+            display: true,
+            text: 'Crop Distribution'
+        }
+    }
+});
+
+//line chart
+var ctx2 = document.getElementById('cropChart').getContext('2d');
+        var cropChart = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Wheat',
+                    data: [50, 60, 70, 65, 55, 45, 50, 55, 60, 65, 70, 75], // Sample wheat yields over 12 months
+                    borderColor: 'rgb(69, 160, 73)',
+                    borderWidth: 2,
+                    fill: false
+                }, {
+                    label: 'Maize',
+                    data: [40, 45, 55, 50, 40, 35, 40, 45, 50, 55, 60, 65], // Sample maize yields over 12 months
+                    borderColor: 'rgba(41, 104, 52)',
+                    borderWidth: 2,
+                    fill: false
+                }, {
+                    label: 'Potatoes',
+                    data: [70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125], // Sample potato yields over 12 months
+                    borderColor: 'rgb(255, 206, 86)',
+                    borderWidth: 2,
+                    fill: false
+                }, {
+                    label: 'Barley',
+                    data: [55, 50, 45, 40, 35, 30, 35, 40, 45, 50, 55, 60], // Sample barley yields over 12 months
+                    borderColor: 'rgb(75, 192, 192)',
+                    borderWidth: 2,
+                    fill: false
+                }, {
+                    label: 'Sorghum',
+                    data: [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85], // Sample sorghum yields over 12 months
+                    borderColor: 'rgb(153, 102, 255)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Yield (tons per hectare)'
+                        }
+                    }]
+                },
+            "plugins": {
+            legend: {
+            display: true,
+            position: 'bottom',
+            align: 'center', 
+
+            labels: {
+                padding: 10,
+                font: {
+                    size: 12 // Adjust font size
+                }
+            }
+        }
+        },
+                title: {
+                    display: true,
+                    text: 'Expected Yields of Crops'
+                }
+            }
+        });
+
+        //bar chart
+        var ctx3 = document.getElementById('yieldComparisonChart').getContext('2d');
+        var yieldComparisonChart = new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: ['Wheat', 'Maize', 'Potatoes', 'Barley', 'Sorghum'],
+                datasets: [{
+                    label: 'Expected Yield',
+                    data: [75, 65, 125, 60, 85], // Sample expected yields for each crop
+                    backgroundColor: 'rgba(41, 104, 52,0.7)',
+                    borderColor: 'rgba(41, 104, 52)',
+                    borderWidth: 1
+                }, {
+                    label: 'Last Year Yield',
+                    data: [70, 60, 120, 55, 80], // Sample last year's yields for each crop
+                    backgroundColor: 'rgb(69, 160, 73,0.5)',
+                    borderColor: 'rgb(69, 160, 73)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            stepSize: 20
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Yield (tons per hectare)'
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Crops'
+                        }
+                    }]
+                },
+            "plugins": {
+            legend: {
+            display: true,
+            position: 'bottom',
+            align: 'center', // Align text to the left
+
+            labels: {
+                padding: 10,
+                font: {
+                    size: 12 // Adjust font size
+                }
+            }
+        }
+        },
+                title: {
+                    display: true,
+                    text: 'Yield Comparison: Expected vs Last Year'
+                }
+            }
+        });
+
+</script>
+</body>
+</html>

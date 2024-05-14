@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/crops.css">
+    <link rel="stylesheet" href="assets/icons/boxicons-master/css/boxicons.css">
+    <link rel="stylesheet" href="assets/icons/fontawesome/css/all.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="script.js"></script>
+    <title>Dashboard</title>
+</head>
+<body>
+       <div class="dash-container">
+        <!-- ----------------------------sidebar-------------------------------- -->
+        <div class="side-bar">
+            <div class="logo">
+                <img src="images/logo.png" alt="logo">
+                <h3>AGRI</h3><span>PLUS</span>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li><a href="dashboard.php" ><i class='bx bxs-dashboard'></i>Overview</a></li>
+                    <li><a href="crops.html" class="active"><i class='fa-solid fa-seedling'></i>Crops</a></li>
+                    <li><a href="tasks.html"><i class='bx bx-task'></i>Tasks</a></li>
+                    <li><a href="analytics.html"><i class='bx bxs-report' ></i>Analytics</a></li>
+                    <li><a href="#"><i class='bx bx-help-circle' ></i></i>Help</a></li>
+                </ul>
+        </div>
+       </div> 
+        <!-- ----------------------------main content-------------------------------- -->
+        <div class="main-content">
+                         
+            <div class="c-top">
+                <div class="form-group">
+                    <select id="crop-name" name="crop-name" required>
+                        <option value="">Select Crop</option>
+                        <option value="Drip">Maize</option>
+                        <option value="Sprinkler">Potatoes</option>
+                        <option value="Flood">Carrots</option>
+                    </select>
+                </div>
+
+                <!-- Add this div for the modal -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Add New Crop</h2>
+      <form id="crop-form" method="POST" action="crops.php">
+        <label for="crop-name">Crop Name:</label>
+        <input type="text" id="crop-name" name="crop-name" required><br><br>
+        
+        <label for="planting-date">Planting Date:</label>
+        <input type="date" id="planting-date" name="planting-date" required><br><br>
+        
+        <label for="harvest-date">Expected Harvest Date:</label>
+        <input type="date" id="harvest-date" name="harvest-date" required><br><br>
+
+        <label for="last_yield">Last Harvest Yield:</label>
+        <input type="number" id="last_yield" name="last_yield"><br><br>
+        
+        <label for="growth-stage">Growth Stage:</label>
+        <input type="text" id="growth-stage" name="growth-stage"><br><br>
+              
+        <label for="watering-needs">Watering Needs:</label>
+        <input type="text" id="watering-needs" name="watering-needs"><br><br>
+        
+        <label for="health-status">Health Status:</label>
+        <input type="text" id="health-status" name="health-status"><br><br>
+        
+        <button type="submit" name="submit">Add Crop</button>
+      </form>
+    </div>
+  </div>
+  
+
+                <div class="add-crop-btn">
+                    <button><i class='bx bx-plus'></i>Add Crop</button>
+                </div>
+            </div>
+
+            <div class="crop-dets">
+                <div class="card">
+                    <div class="icon">
+                        <i class="fa-solid fa-spa"></i>
+                    </div>
+                    
+                    <div class="det">
+                    <span>Crop Name</span>
+                    <h3>Maize</h3>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="icon">
+                        <i class="fa-solid fa-crop-simple"></i>
+                    </div>
+                    <div class="det">
+                    <span>Size</span>
+                    <h3>2.5 Acres</h3>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="icon">
+                        <i class="fa-solid fa-sack-xmark"></i>
+                    </div>
+                    <div class="det">
+                    <span>Last Production</span>
+                    <h3>20 Bags</h3>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="mid-space">
+                <div class="crop-details">
+                    <h4>Crop details</h4>
+                    <div class="card">
+                        <div class="icon">
+                            <i class="fa-solid fa-seedling"></i>
+                        </div>
+                        <div class="dets">
+                            <span>Growth Stage</span>
+                            <h4>Germination</h4>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="icon">
+                            <i class="fa-solid fa-leaf"></i>
+                        </div>
+                        <div class="dets">
+                        <span>Plant Health</span>
+                        <h4>Good</h4>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="icon">
+                            <i class="fa-solid fa-droplet"></i>
+                        </div>
+                        <div class="dets">
+                            <span>Watering Needs</span>
+                        <h4>Low</h4>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="stats">
+                    <h4>Yield Statistics</h4>
+                    <span>Compared with last harvest</span>
+                    <div class="stat-sects">
+                        <div class="chart">
+                            <div id="chart">
+                            </div>
+                        </div>
+                        <div class="statistics">
+                            <div class="stat">
+                                <span>Last Harvest Yield</span>
+                                <h3>20 Bags</h3>
+                            </div>
+                            <div class="stat">
+                                <span>Expected Yield</span>
+                                <h3>23 Bags</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                
+            </div>
+
+            <div class="down-sect">
+                <h4>Expected Yield Details</h4>
+
+                <canvas id="myChart" width="1000" height="180"></canvas>
+
+            </div>
+
+        
+           
+
+        </div>
+
+    </div>
+
+<script>
+var options = {
+    chart: {
+      height: 200,
+      type: "radialBar"
+    },
+    
+    series: [67],
+    colors: ["#45a049"],
+    
+    plotOptions: {
+      radialBar: {
+        hollow: {
+          margin: 10,
+          size: "70%"
+        },
+       
+        dataLabels: {
+          showOn: "always",
+          name: {
+            offsetY: -10,
+            show: true,
+            color: "#888",
+            fontSize: "12px"
+          },
+          value: {
+            offsetY: -3,
+            color: "#111",
+            fontSize: "15px",
+            fontWeight: "bold",
+            show: true
+          },     
+        }
+      }
+    },
+  
+    stroke: {
+      lineCap: "round",
+    },
+    labels: ["Progress"]
+  };
+  
+  var chart = new ApexCharts(document.querySelector("#chart"), options);
+  
+  chart.render();
+
+
+// Sample data for the chart
+const labels = ['January', 'February', 'March', 'April', 'May','June','July','August','September','October','November','December'];
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Expected Yields',
+                backgroundColor: 'rgb(69, 160, 73,0.3)',
+                borderColor: '#45a049',
+                borderWidth: 1,
+                data: [100, 150, 120, 180, 160]
+            }]
+        };
+
+        // Create a new bar chart
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+
+        //pop up for adding new crop
+const addButton = document.querySelector('.add-crop-btn button');
+const modal = document.getElementById('modal');
+const closeButton = document.getElementsByClassName('close')[0];
+const cropForm = document.getElementById('crop-form');
+
+// Function to open the modal
+function openModal() {
+  modal.style.display = 'block';
+}
+
+// Function to close the modal
+function closeModal() {
+  modal.style.display = 'none';
+}
+
+// Open the modal when the "Add Crop" button is clicked
+addButton.addEventListener('click', openModal);
+
+// Close the modal when clicking on the close button
+closeButton.addEventListener('click', closeModal);
+
+// Close the modal when clicking outside of it
+window.addEventListener('click', (event) => {
+  if (event.target === modal) {
+    closeModal();
+  }
+});
+
+// Close the modal when clicking the "Esc" key
+window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        closeModal();
+
+    }
+});
+
+
+
+    </script>
+</body>
+</html>

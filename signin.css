@@ -1,0 +1,161 @@
+/* Your existing CSS code */
+
+/* poppins font */
+@font-face {
+    font-family: 'Poppins';
+    src: url('assets/fonts/Poppins/Poppins-Light.ttf') format('truetype');
+}
+
+/* montserrat font */
+@font-face {
+    font-family: 'Montserrat';
+    src: url('assets/fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype');
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/_Banner.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 110vh;
+}
+/* Hide the scrollbar */
+body::-webkit-scrollbar {
+    width: 0; /* Hide scrollbar for Chrome, Safari, and Opera */
+  }
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px); */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 100px;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+}
+
+header.scrolled {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+header img {
+    width: 150px; 
+    height: auto; 
+    margin-left: 50px;
+}
+
+header .menu{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+header .menu ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu ul li:first-child {
+    margin-left: 0;
+}
+
+header .menu ul li {
+    margin :0 50px;
+}
+
+header .menu ul li a {
+    text-decoration: none;
+    color: #296834;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 10px;
+}
+
+header .menu ul li a.active {
+    border-bottom: #296834 2px solid;
+}
+
+.container{
+    padding: 5rem;
+    position: relative;
+    top: 2rem;
+}
+
+form {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+h2 {
+    color: #333;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="submit"] {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    background-color: #45a049;
+    color: #fff;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+input[type="submit"]:hover {
+    background-color: #296834;
+}
+
+h4 {
+    font-weight: 400;
+}
+
+h4 a {
+    text-decoration: none;
+    color: #296834;
+    font-weight: bolder;
+}
+
+.log-form h2 {
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 400;
+    color: #45a049;
+    margin-bottom: 20px;
+}
+
+/* responsiveness */

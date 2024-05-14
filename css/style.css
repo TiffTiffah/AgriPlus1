@@ -1,0 +1,416 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2&family=Montserrat:wght@100&family=Poppins:wght@500&display=swap');@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+* {
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+   
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color:transparent;
+    /* backdrop-filter: blur(10px); */
+    height: 100px;
+    padding: 0 0 0 50px;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+}
+
+header img {
+    width: 150px; 
+    height: auto; 
+    flex: 1;
+}
+header.scrolled {
+background-color: rgba(255, 255, 255, 0.3);
+backdrop-filter: blur(10px);
+transition: background-color 0.3s;
+}
+.menu{
+flex: 1;
+background-color: plum;
+}
+.menu ul {
+list-style: none;
+margin: 0 auto; /* Center the list horizontally */
+padding: 0;
+text-align: center; /* Center the text within the list items */
+}
+
+.menu ul li {
+display: inline-block;
+margin-left: 20px;
+}
+
+.menu ul li:first-child {
+margin-left: 0; /* Remove left margin from the first list item */
+}
+.menu ul li a {
+text-decoration: none;
+color: #333;
+transition: color 0.3s;
+}
+
+.menu ul li a:hover {
+color: #666;
+}
+
+.logins {
+position: absolute;
+right: 0;
+margin-right: 100px;
+padding: 15px;
+flex: 1;
+}
+
+.logins ul {
+list-style: none;
+margin: 0;
+padding: 0;
+}
+
+.logins ul li {
+display: inline-block;
+margin-left: 20px;
+}
+
+.logins ul li a {
+text-decoration: none;
+color: #333;
+transition: color 0.3s;
+}
+
+.logins ul li a:hover {
+color: #666;
+}
+
+.hero{
+    
+    background-size: cover;
+    background-position: center; height: 110vh;
+}
+
+
+.banner {
+    justify-content: flex-start;
+    align-items: center;
+    padding: 150px 0 0 100px;
+    text-align: left;
+    width: 40vw;
+    height: 70vh;
+}
+.banner h1 {
+    font-size: 40px;
+    color: #296834;
+    font-family: 'Poppins', sans-serif;
+}
+.banner h3{
+    font-family: 'Montserrat', sans-serif;
+    line-height: 2rem;
+}
+
+.banner p {
+    margin-right: 40px;
+}
+
+button {
+    padding: 15px 20px;
+    border-radius: 7px;
+    font-size: 16px;
+    background-color: #4D9B44; /* Add your preferred button background color */
+    color: #fff; /* Add your preferred button text color */
+    border: none;
+    cursor: pointer;
+}
+button a{
+    text-decoration: none;
+    color: #fff;
+}
+
+button:hover {
+    background-color: #4D9B44; /* Add your preferred button background color on hover */
+}
+
+/* ======================================================ABOUT US======================================== */
+.sc-part-two{
+    background: whitesmoke;
+    height: 110vh;
+    padding: 0rem 8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ 
+
+
+   }
+
+.sc-part-two .about-image{
+    width: 50vw;
+    height: 80vh;
+  
+   
+}
+
+.sc-part-two .about-banner{
+   margin-left: -5.5rem;
+   top: 4rem;
+   background: white;    
+   color: #033303;
+   text-align: left;
+   width: 45vw;
+   height: 80vh;
+   padding: 7rem 5rem;
+   position: relative;
+}
+.sc-part-two .about-banner::before{
+    content: "About";
+    position: absolute;
+    color: #28ad66;
+    font-size: 8.2rem;
+    font-weight: 900;
+    opacity: .1;
+    top: 0;
+    z-index: 1;
+}
+
+.sc-part-two .about-banner h3{
+    color: #28ad66;
+}
+.sc-part-two .about-banner strong{
+    font-size: 1.6rem;
+}
+.sc-part-two .about-banner p{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    margin-top: 1.5rem;
+    line-height: 2rem;
+    color: black;
+}
+.read-btn{
+    margin-top: 1rem;
+    background: white;
+}
+.read-btn{
+   
+    border: 2px solid #d70070 ;
+
+}
+.read-btn:hover{
+    background: #d70070 ;
+    color: white;
+    border-color: transparent;
+}
+/* ==============================================what we do================================= */
+.services{
+    background: white;
+    color: #033303;
+    height: 110vh;
+    padding: 3rem 8rem;
+    text-align: center;
+    
+}
+.services h1{
+    color: #4D9B44;
+    font-size: 28px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+.services .texts p{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: black;
+    margin-top: 1rem;
+    line-height: 2rem;
+}
+.services .cards{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 3rem;
+
+}
+.services .cards .card{
+    background-color: #fff;
+    color: #033303;
+    padding: 2rem;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 20vw;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+.services .cards .card h3{
+    color: rgb(0, 0, 0, 0.7);
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+
+}
+
+.services .cards .card p{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: black;
+    line-height: 2rem
+}
+.services .cards .card .icon i{
+    font-size: 40px;
+    color: #fff;
+    background-color: rgb(77, 155, 68, 0.8);
+    padding: 2.5rem;
+    border-radius: 50%;
+
+}
+
+
+/* ==================================================footer============================= */
+footer{
+    height: 80vh;
+    background:#4D9B44;
+} 
+.footer-sec{
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    gap: 2rem;
+    color: #F8F7F2;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+.footer-sec .footer-logo
+{
+  width: 30vw;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+
+}
+
+.footer-sec .footer-logo .ft-logo{
+    padding: 3rem;
+    height: 30vh;
+    margin-top: 1rem;
+    line-height: 2rem;
+}
+
+
+.footer-sec .footer-explore
+{
+  width: 20vw;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  line-height: 3rem;
+
+}
+.footer-sec .footer-explore a{
+    color: #fff;
+    font-weight: bold;
+}
+.footer-sec .footer-explore a:hover{
+    color: #033303;
+    transition: 0.8s ease;
+}
+.footer-sec .footer-contacts
+{
+  width: 20vw;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  line-height: 2rem;
+
+}
+.footer-sec .footer-contacts ul{
+    margin-top: 1rem;
+}
+.footer-sec .footer-contacts a{
+    color: #fff;
+    font-weight: 400;
+}
+.footer-sec .footer-contacts a:hover{
+    color: #033303;
+    transition: 0.8s ease;
+}
+
+.footer-sec .footer-socials{
+    width: 20vw;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    padding: 3rem;
+    line-height: 3rem;
+}
+.footer-sec .footer-socials ul{
+    margin-top: 1rem;
+}
+.footer-sec .footer-socials a{
+    color: #fff;
+    font-weight: 400;
+    font-size: 17px;
+   display: flex;
+   justify-content:left;
+   align-items: center;
+    flex-direction: row;
+
+    position: relative;
+    gap: 1rem;
+}
+.footer-sec .footer-socials a:hover{
+    color: #033303;
+    transition: 0.5s ease;
+}
+.footer-sec .footer-socials i{
+   font-size: 24px;
+}
+footer .footer-bottom{
+    align-items: center;
+text-align: center;
+border-top: 1px solid rgba(255, 2555, 255, 0.2);
+color: #F8F7F2;
+font-family: 'Montserrat', sans-serif;
+font-weight: 600;
+}
+@media screen and (max-width: 768px) {
+    header {
+        padding: 0 20px; /* Adjust padding for smaller screens */
+    }
+
+    .menu {
+        display: none; /* Hide the menu on smaller screens */
+    }
+
+    .logins {
+        margin-right: 20px; /* Adjust margin for smaller screens */
+    }
+
+    .banner {
+        width: 100%; /* Adjust width for smaller screens */
+        padding: 100px 20px; /* Adjust padding for smaller screens */
+        text-align: center; /* Center align text for smaller screens */
+    }
+
+    .banner h1 {
+        font-size: 32px; /* Decrease font size for smaller screens */
+    }
+
+    /* Add more styles as needed */
+}

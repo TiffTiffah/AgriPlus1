@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="farm_reg.css">
+    <title>Farm Registration</title>
+    
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="images/logo (1).png" alt=""></a>
+        </div>
+        
+    </header>
+
+<div class="container">
+
+    <div class="form-container">
+        <h2>Hello Farmer!</h2>
+        <p>Register your farm to get started with our services.</p>
+        <form method="post" action="farm_reg.php">
+            <div class="form-group">
+                <label for="farm_name">Farm Name:</label>
+                <input type="text" id="farm_name" name="farm_name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <select id="location" name="location" required>
+                    <option value="">Select Location</option>
+                    <option value="Nairobi">Nairobi</option>
+                    <option value="Mombasa">Mombasa</option>
+                    <option value="Kisumu">Kisumu</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="farm_name">Farm Size(in Acres):</label>
+                <input type="text" id="farm_size" name="farm_size" required>
+            </div>
+
+            <div class="form-group">
+                <label for="irrigation_system">Irrigation System:</label>
+                <select id="irrigation_system" name="irrigation_system" required>
+                    <option value="">Select Irrigation System</option>
+                    <option value="Drip">Drip</option>
+                    <option value="Sprinkler">Sprinkler</option>
+                    <option value="Flood">Flood</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="soil_type">Soil Type:</label>
+                <select id="soil_type" name="soil_type" required>
+                    <option value="">Select Soil Type</option>
+                    <option value="Loam">Loam</option>
+                    <option value="Clay">Clay</option>
+                    <option value="Sand">Sand</option>
+                </select>
+            </div>
+
+           
+
+            <div class="form-group">
+                <input type="submit" value="Register">
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+
+<script>
+    window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+        document.querySelector("header").classList.add("scrolled");
+    } else {
+        document.querySelector("header").classList.remove("scrolled");
+    }
+}
+
+</script>
+</html>

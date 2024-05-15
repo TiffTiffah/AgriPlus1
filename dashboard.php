@@ -10,12 +10,7 @@ if (!isset($_SESSION["user_id"])) {
 }
 $userID = $_SESSION["user_id"]; // Get the user ID from the session
 // Connect to the database
-$conn = new mysqli("localhost", "root", "", "agri");
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include 'db_connection.php';
 
 
 
@@ -206,12 +201,21 @@ if ($result->num_rows > 0) {
     $temperature = $row['temperature'];
     $ph = $row['ph'];
     $moisture = $row['moisture'];
+
+
+
 } else {
     // Default values if no soil data found
     $temperature = 0;
     $ph = 0;
     $moisture = 0;
 }
+    //send them to javascript
+    echo "<script>";
+    echo "const soil_temp = " . $temperature . ";";
+    echo "const ph = " . $ph . ";";
+    echo "const moisture = " . $moisture . ";";
+    echo "</script>";
 
 // Close statement and database connection
 $stmt_soil->close();
@@ -441,7 +445,7 @@ echo "</script>";
             </div>
             <div class="title">
                 <h5>Moisture level</h5>
-                <h3><?php echo $moisture; ?>%</h3>
+                <h3 id="moisture"><?php echo $moisture; ?>%</h3>
                 <h6><?php echo ($moisture > 50) ? 'Too Wet' : 'Optimal'; ?></h6>
             </div>
         </div>
@@ -452,7 +456,7 @@ echo "</script>";
             </div>
             <div class="title">
                 <h5>pH level</h5>
-                <h3><?php echo $ph; ?></h3>
+                <h3 id="ph"><?php echo $ph; ?></h3>
                 <h6><?php echo ($ph == 7) ? 'Neutral' : (($ph > 7) ? 'Alkaline' : 'Acidic'); ?></h6>
 
             </div>
@@ -464,7 +468,7 @@ echo "</script>";
             </div>
             <div class="title">
                 <h5>Temperature</h5>
-                <h3><?php echo $temperature; ?>°</h3>
+                <h3 id="soil-temp"><?php echo $temperature; ?>°</h3>
                 <h6><?php echo ($temperature > 30) ? 'Too Hot' : 'Optimal'; ?></h6>
             </div>
         </div>
@@ -554,6 +558,29 @@ if ($result_farm->num_rows > 0) {
 $stmt_farm->close();
 
    
+
+
+$sql_select = "SELECT taskName, dueDate FROM tasks WHERE dueDate < CURRENT_DATE() AND status IN ('due')";
+$result = $conn->query($sql_select);
+
+if ($result->num_rows > 0) {
+    // Initialize an array to store task alerts
+    $taskAlerts = [];
+    
+    // Output data of each row
+    while($row = $result->fetch_assoc()) {
+        // Construct the task alert message
+        $taskAlert = " \"" . $row["taskName"] . "\" was due on " . $row["dueDate"];
+        // Add task alert to the array
+        $taskAlerts[] = $taskAlert;
+    }
+
+    // Output the task alerts as JSON
+    echo "<script>var taskAlerts = " . json_encode($taskAlerts) . ";</script>";
+} else {
+    echo "<script>var taskAlerts = [];</script>"; // Initialize empty array if no tasks found
+}
+
 
 
 // Prepare SQL statement to fetch crop names from the database
@@ -706,7 +733,7 @@ if ($result === false) {
         <input type="text" id="soil-moisture" name="soil-moisture" required><br>
 
         <div class="form-group">
-            <button class="edit-button" type="submit" name="add" onclick="addSoilData()">Add Data</button>
+            <button class="edit-button" type="submit" name="add">Add Data</button>
         </div>
     </form>
 </div>
@@ -858,10 +885,11 @@ $table = '<table border="1">
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
+        $expected_yield = intval($row['yield_predicted'] / 90);
         $table .= '<tr>';
         $table .= '<td>' . $row['cropName'] . '</td>';
         $table .= '<td>' . $row['lastHarvestYield'] . '</td>';
-        $table .= '<td>' . $row['yield_predicted'] . '</td>';
+        $table .= '<td>' . $expected_yield . '</td>';
         $table .= '<td>' . $row['month'] . '</td>';
         $table .= '</tr>';
     }
@@ -954,25 +982,42 @@ $conn->close();
 
 
 <script>
-function addSoilData() {
-    var soilType = document.getElementById("soil-type").value;
-    var phLevel = parseFloat(document.getElementById("ph-level").value);
-    var soilMoisture = document.getElementById("soil-moisture").value;
+
+// Function to display task alerts
+function displayTaskAlerts() {
+    // Loop through the taskAlerts array
+    for (var i = 0; i < taskAlerts.length; i++) {
+        // Display each task alert
+        addAlertToList(taskAlerts[i]);
+    }
+}
+
+
+
+// Function to check soil data and display alerts
+function addSoilData(soil_temp, ph, moisture) {
+    // Check soil temperature
+    var tempAlert = "";
+    if (soil_temp > 30) {
+        tempAlert = "Soil is too hot!";
+    } else if (soil_temp < 15) {
+        tempAlert = "Soil is too cold!";
+    }
 
     // Check pH level
     var phAlert = "";
-    if (phLevel < 6) {
+    if (ph < 6) {
         phAlert = "Soil is too acidic!";
-    } else if (phLevel > 9) {
+    } else if (ph > 9) {
         phAlert = "Soil is too alkaline!";
     }
 
     // Check soil moisture
     var moistureAlert = "";
-    if (soilMoisture === "low") {
-        moistureAlert = "Farm needs irrigation!";
-    } else if (soilMoisture === "high") {
-        moistureAlert = "No need for irrigation!";
+    if (moisture < 30) {
+        moistureAlert = "Low soil moisture - Irrigate the farm!";
+    } else if (moisture > 80) {
+        moistureAlert = "High soil moisture - Consider reducing watering!";
     }
 
     // Display alerts if needed
@@ -982,11 +1027,15 @@ function addSoilData() {
     if (moistureAlert !== "") {
         addAlertToList(moistureAlert);
     }
+    if (tempAlert !== "") {
+        addAlertToList(tempAlert);
+    }
 }
 
 // Maximum number of alerts to display
 var maxAlerts = 5;
 
+// Function to add alert to the list
 function addAlertToList(alertMessage) {
     // Get the number of alerts
     var numberOfAlerts = document.querySelectorAll("#notificationDropdown .alerts li").length;
@@ -1009,22 +1058,26 @@ function addAlertToList(alertMessage) {
     }
 }
 
+// Function to update alert badge visibility
 function updateAlertBadge() {
     // Get the number of alerts
     var numberOfAlerts = document.querySelectorAll("#notificationDropdown .alerts li").length;
 
-    // Update the alert badge with the number of alerts
+    // Update the alert badge with the number of alerts and toggle its visibility
     var alertBadge = document.getElementById("alertBadge");
-    alertBadge.textContent = numberOfAlerts; // Update badge content
-
-    // Show or hide the badge based on the number of alerts
     if (numberOfAlerts > 0) {
-        alertBadge.style.display = "inline-block"; // Show the badge
-        alertBadge.style.textAlign = "center"; // Center the badge text
+        alertBadge.textContent = numberOfAlerts; // Update badge content
+        alertBadge.style.display = "inline-block"; // Show the badge if there are alerts
     } else {
         alertBadge.style.display = "none"; // Hide the badge if there are no alerts
     }
 }
+
+// Call the function to update the alert badge
+    addSoilData(soil_temp, ph, moisture);
+    displayTaskAlerts()
+
+
 
 
 
@@ -1133,7 +1186,8 @@ function updateTaskProgressChart() {
             // Draw the chart
             const options = {
                 chart: {
-                    height: 280,
+                    width: 250,
+                    height: 300,
                     type: "radialBar"
                 },
                 labels: ["Tasks Completed"],
@@ -1143,7 +1197,7 @@ function updateTaskProgressChart() {
                     radialBar: {
                         hollow: {
                             margin: 10,
-                            size: "70%"
+                            size: "75%"
                         },
                         dataLabels: {
                             showOn: "always",
@@ -1151,13 +1205,13 @@ function updateTaskProgressChart() {
                                 offsetY: -10,
                                 show: true,
                                 color: "#888",
-                                fontSize: "13px",
+                                fontSize: "15px",
                                 fontFamily: 'Montserrat'
                             },
                             value: {
                                 offsetY: -2,
                                 color: "#111",
-                                fontSize: "13px",
+                                fontSize: "15px",
                                 fontWeight: "bold",
                                 fontFamily: 'Montserrat',
                                 show: true
@@ -1188,6 +1242,6 @@ updateTaskProgressChart();
 
 
 
-        </script>
+</script>
 </body>
 </html>

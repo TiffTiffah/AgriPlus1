@@ -1,1 +1,1 @@
-{"version":1,"defects":{"TestWeatherForecast::testFetchWeatherForecast":4},"times":{"TestWeatherForecast::testFetchWeatherForecast":0.005}}
+{"version":1,"defects":{"TestWeatherForecast::testFetchWeatherForecast":4,"WeatherForecastTest::testFetchWeatherForecast":3},"times":{"TestWeatherForecast::testFetchWeatherForecast":0.005,"WeatherForecastTest::testFetchWeatherForecast":2.81}}

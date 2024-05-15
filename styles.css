@@ -314,6 +314,7 @@ font-weight: 500;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
     display: none; /* Hide it by default */
+    z-index: 2; 
 }
 
 
@@ -451,7 +452,6 @@ font-weight: 500;
 .task-progress{
     margin-top: 2rem;
     border-radius: 10px;
-    padding: 1rem;
   }
   .task-progress h4{
     font-size: 18px;
@@ -544,4 +544,28 @@ font-weight: 500;
     background-color: #ddd;
 }
 
-/* Adjust as needed */
+
+  #confirmDeleteModalHeader {
+    background-color: #343a40;
+    color: #fff;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+
+  #confirmDeleteModalBody {
+    color: #000;
+  }
+
+  #confirmDeleteModalFooter {
+    border-top: none;
+  }
+
+  #confirmDeleteButton {
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+
+  #confirmDeleteButton:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+  }

@@ -15,18 +15,14 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         echo "id: " . $row["taskID"]. " - Name: " . $row["taskName"]. " " . $row["dueDate"]. "<br>";
     }
-    echo_json_encode($result);
+    echo json_encode($result);
 } else {
     echo "0 results";
 }
 
-
-
 // Query tasks that have passed their due date and are still pending
 $sql = "UPDATE tasks SET status = 'due' WHERE dueDate < CURRENT_DATE() AND status IN ('pending')";
 if ($conn->query($sql) === TRUE) {
-
-
     echo "Task statuses updated successfully.";
 } else {
     echo "Error updating task statuses: " . $conn->error;

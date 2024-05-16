@@ -47,15 +47,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     $planting_date = test_input($_POST["planting-date"]);
     $expected_harvest_date = test_input($_POST["harvest-date"]);
     $last_harvest_yield = test_input($_POST["last_yield"]);
-    $growth_stage = test_input($_POST["growth-stage"]);
     $watering_needs = test_input($_POST["watering-needs"]);
-    $health_status = test_input($_POST["health-status"]);
     $cultivated_area = test_input($_POST["cultivated_area"]);
 
 
 
 // Prepare SQL statement to insert crop data
-$sql_insert_crop = "INSERT INTO crops (FarmID, CropName, PlantingDate, ExpectedHarvestDate, LastHarvestYield, GrowthStage, WateringNeeds, HealthStatus, CultivatedArea) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$sql_insert_crop = "INSERT INTO crops (FarmID, CropName, PlantingDate, ExpectedHarvestDate, LastHarvestYield, WateringNeeds, CultivatedArea) VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmt_insert_crop = $conn->prepare($sql_insert_crop);
 
 if ($stmt_insert_crop === false) {
@@ -63,7 +61,7 @@ if ($stmt_insert_crop === false) {
 }
 
 // Bind parameters
-$stmt_insert_crop->bind_param("isssdsssd", $farm_id, $crop_name, $planting_date, $expected_harvest_date, $last_harvest_yield, $growth_stage, $watering_needs, $health_status, $cultivated_area);
+$stmt_insert_crop->bind_param("isssdsd", $farm_id, $crop_name, $planting_date, $expected_harvest_date, $last_harvest_yield, $watering_needs, $cultivated_area);
 
 // Execute SQL statement
 if ($stmt_insert_crop->execute()) {
@@ -220,6 +218,7 @@ function test_input($data) {
         <!-- ----------------------------sidebar-------------------------------- -->
         <div class="side-bar">
             <div class="logo">
+                <img src="images/logo (1).png" alt="logo">
                 <h3>AGRI</h3><span>PLUS</span>
             </div>
             <div class="menu">
@@ -228,6 +227,7 @@ function test_input($data) {
                     <li><a href="crops.php" class="active"><i class='fa-solid fa-seedling'></i>Crops</a></li>
                     <li><a href="tasks.php"><i class='bx bx-task'></i>Tasks</a></li>
                     <li><a href="analytics.php"><i class='bx bxs-report' ></i>Analytics</a></li>
+                    <li><a href="help.php"><i class='bx bx-help-circle' ></i></i>Help</a></li>
                     <li><a href="logout.php"><i class='bx bx-exit'></i>Logout</a></li>
                 </ul>
         </div>
@@ -279,15 +279,10 @@ function test_input($data) {
 
         <label for="cultivated_area">Cultivated Area:</label>
         <input type="number" id="cultivated_area" name="cultivated_area"><br><br>
-        
-        <label for="growth-stage">Growth Stage:</label>
-        <input type="text" id="growth-stage" name="growth-stage"><br><br>
               
         <label for="watering-needs">Watering Needs:</label>
         <input type="text" id="watering-needs" name="watering-needs"><br><br>
-        
-        <label for="health-status">Health Status:</label>
-        <input type="text" id="health-status" name="health-status"><br><br>
+
         
         <button type="submit" name="submit">Add Crop</button>
       </form>
@@ -453,48 +448,58 @@ document.getElementById('crop-type').addEventListener('change', function() {
                                 var difference = expectedYield - lastHarvest;
                                 var percentageIncrease = ((difference / lastHarvest) * 100).toFixed(2); // Round to two decimal places
                                 
+                                
 
                                 
-                                // Update the radial chart with the percentage increase
-                                var options = {
-                                    chart: {
-                                        height: 200,
-                                        type: "radialBar"
-                                    },
-                                    series: [percentageIncrease],
-                                    colors: ["#45a049"],
-                                    plotOptions: {
-                                        radialBar: {
-                                            hollow: {
-                                                margin: 10,
-                                                size: "70%"
-                                            },
-                                            dataLabels: {
-                                                showOn: "always",
-                                                name: {
-                                                    offsetY: -10,
-                                                    show: true,
-                                                    color: "#888",
-                                                    fontSize: "12px"
-                                                },
-                                                value: {
-                                                    offsetY: -3,
-                                                    color: "#111",
-                                                    fontSize: "15px",
-                                                    fontWeight: "bold",
-                                                    show: true
-                                                },     
-                                            }
-                                        }
-                                    },
-                                    stroke: {
-                                        lineCap: "round",
-                                    },
-                                    labels: ["Increase"]
-                                };
-                                
-                                var chart = new ApexCharts(document.querySelector("#chart"), options);
-                                chart.render();
+                                var data = {
+    datasets: [{
+        data: [percentageIncrease], // Assuming percentageIncrease is the value you want to display
+        backgroundColor: ['#45a049'],
+        hoverBackgroundColor: ['#45a049']
+    }],
+    labels: [percentageIncrease > 0 ? "Increase" : "Decrease"] // Dynamically set the label based on percentageIncrease
+};
+
+var options = {
+    chart: {
+        height: 200,
+        type: "radialBar"
+    },
+    series: [percentageIncrease],
+    colors: ["#45a049"],
+    plotOptions: {
+        radialBar: {
+            hollow: {
+                margin: 10,
+                size: "70%"
+            },
+            dataLabels: {
+                showOn: "always",
+                name: {
+                    offsetY: -10,
+                    show: true,
+                    color: "#888",
+                    fontSize: "12px"
+                },
+                value: {
+                    offsetY: -3,
+                    color: "#111",
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                    show: true
+                },     
+            }
+        }
+    },
+    stroke: {
+        lineCap: "round",
+    },
+    labels: [percentageIncrease > 0 ? "Increase" : "Decrease"] // Dynamically set the label based on percentageIncrease
+};
+
+var chart = new ApexCharts(document.querySelector("#chart"), options);
+chart.render();
+
                             } else {
                                 console.error('Failed to fetch most recent expected yield');
                             }

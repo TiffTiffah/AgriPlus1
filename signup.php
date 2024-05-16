@@ -2,8 +2,9 @@
 // Start session
 session_start();
 
-// Define variables and initialize with empty values
-$errors = [];
+//include database 
+include 'db_connection.php';
+
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -14,23 +15,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = test_input($_POST["password"]);
     $confirm_password = test_input($_POST["confirm_password"]);
 
-    // Check if passwords match
-    if ($password != $confirm_password) {
-        $errors[] = "Passwords do not match";
-    }
+// Validate form data
+$validationErrors = array();
 
-    // Check if email is valid
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Invalid email format";
-    }
+// Check if email is empty
+if (empty($email)) {
+    $validationErrors[] = "Email is required.";
+} elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) { // Check if email is valid
+    $validationErrors[] = "Invalid email format.";
+}
 
-    // Check if email is already in use
-    $conn = new mysqli("localhost", "root", "", "agri");
 
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
 
     // Prepare SQL statement with placeholders
     $sql = "SELECT UserID FROM users WHERE Email = ?";
@@ -45,38 +40,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Store result
     $stmt->store_result();
 
-    // Check if email is already taken
     if ($stmt->num_rows > 0) {
-        $errors[] = "Email is already taken. Please register with a different email.";
+        $validationErrors[] = "Email is already taken. Please register with a different email.";
     } else {
         // If no validation errors, proceed with database insertion
-        if (empty($errors)) {
+        if (empty($validationErrors)) { // Change $errors to $validationErrors
             // Perform hash encryption for password
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
+    
             // Prepare SQL statement with placeholders
             $sql = "INSERT INTO users (FullName, Username, Email, PasswordHash) VALUES (?, ?, ?, ?)";
-
+    
             // Prepare and bind parameters
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("ssss", $fullname, $username, $email, $hashed_password);
-
+    
             // Execute SQL statement
             if ($stmt->execute()) {
                 // Registration successful, retrieve user ID
                 $user_id = $stmt->insert_id;
-
+    
                 // Store user ID in session
                 $_SESSION["user_id"] = $user_id;
-
+    
                 // Redirect user to farm registration page
                 header("Location: farm_reg.php?registration=success");
                 exit();
             } else {
-                $errors[] = "Error: " . $stmt->error;
+                $validationErrors[] = "Error: " . $stmt->error; // Change $errors to $validationErrors
             }
         }
     }
+    
 
     // Close statement
     $stmt->close();
@@ -97,4 +92,68 @@ function test_input($data) {
 
 
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="signin.css">
+</head>
+<body>
+    
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="images/logo (1).png" alt=""></a>
+        </div>
+        
+    </header>
 
+    <div class="container">
+        
+        <form method="post" action="signup.php">
+            <label for="fullname">Fullname:</label>
+            <input type="text" id="fullname" name="fullname" required><br>
+    
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br>
+    
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br>
+    
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}" title="Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long." required><br>
+    
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required><br>
+    
+            <input type="submit" name="submit" value="Sign Up">
+            <br>
+            <?php
+// Display validation errors if any
+if (!empty($validationErrors)) {
+    echo '<div class="error-container">';
+    foreach ($validationErrors as $error) {
+        echo "<p class='error'>$error</p>";
+    }
+    echo '</div>';
+}
+?>
+            <h4>Already have an  account? <a href="signin.html">&nbsp; Sign In</a></h4>
+        </form>
+   
+    </div>
+</body>
+<script>
+    window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+        document.querySelector("header").classList.add("scrolled");
+    } else {
+        document.querySelector("header").classList.remove("scrolled");
+    }
+}
+
+</script>
+</html>

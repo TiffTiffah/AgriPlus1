@@ -301,6 +301,8 @@ if ($response !== false) {
         $daylight_hours = (strtotime($sunset) - strtotime($sunrise)) / 3600; // Convert daylight duration to hours
         $sunshine_duration = $daylight_hours * (1 - $cloudiness);
 
+        
+
 
 } else {
     echo "Error retrieving weather data";
@@ -356,7 +358,7 @@ echo "</script>";
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <!-- <script src="script.js"></script> -->
-    <title>Dashboard</title>
+    <title>AgriPlus | Dashboard</title>
 </head>
 <body>
        <div class="dash-container">
@@ -372,6 +374,7 @@ echo "</script>";
                     <li><a href="crops.php"><i class='fa-solid fa-seedling'></i>Crops</a></li>
                     <li><a href="tasks.php"><i class='bx bx-task'></i>Tasks</a></li>
                     <li><a href="analytics.php"><i class='bx bxs-report' ></i>Analytics</a></li>
+                    <li><a href="help.php"><i class='bx bx-help-circle' ></i></i>Help</a></li>
                     <li><a href="logout.php"><i class='bx bx-exit'></i>Logout</a></li>
                 </ul>
         </div>
@@ -396,7 +399,18 @@ echo "</script>";
                                 <i class='bx bxs-sun'></i>
                             </div>
                             <div class="title">
-                                <h4 class="lbl"><? echo number_format($sunshine_duration, 2); ?> hours</h5>
+                                <h4 class="lbl"><?php
+// Debugging
+
+// Ensure that $daylight_hours is defined and contains a value
+if(isset($daylight_hours)) {
+    // Convert daylight_hours to integer using intval
+    $daylight_hours_int = intval($daylight_hours);
+    echo $daylight_hours_int;
+} else {
+    echo "Variable \$daylight_hours is not set or has no value.";
+}
+?> hours</h5>
                                 <h4>Sunshine Duration</h4>
                             </div>
                         </div>
@@ -560,8 +574,12 @@ $stmt_farm->close();
    
 
 
-$sql_select = "SELECT taskName, dueDate FROM tasks WHERE dueDate < CURRENT_DATE() AND status IN ('due')";
-$result = $conn->query($sql_select);
+$sql_select = "SELECT taskName, dueDate FROM tasks WHERE farmID = ? AND dueDate < CURRENT_DATE() AND status IN ('due')";
+$result = $conn->prepare($sql_select);
+$result->bind_param("i", $farm_id);
+$result->execute();
+$result = $result->get_result();
+
 
 if ($result->num_rows > 0) {
     // Initialize an array to store task alerts
@@ -591,6 +609,58 @@ if ($result === false) {
     die("Error fetching crops: " . $conn->error);
 }
 
+// Check if the request is a POST request and if 'crop-type' parameter is set
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['crop-type'])) {
+    // Retrieve crop name from POST data
+    $selectedCrop = test_input($_POST['crop-type']);
+
+    // Connect to the database (adjust database credentials as needed)
+    $conn = new mysqli("localhost", "root", "", "agri");
+
+    // Check connection
+    if ($conn->connect_error) {
+        // Handle database connection error
+        echo json_encode(array('error' => 'Database connection failed'));
+        exit();
+    }
+
+    // Prepare and execute SQL query to fetch crop details
+    $stmt = $conn->prepare("SELECT * FROM crops WHERE CropName = ? AND FarmID = $farm_id");
+    $stmt->bind_param("s", $selectedCrop);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Check if any rows were returned
+    if ($result->num_rows > 0) {
+        // Fetch the row
+        $row = $result->fetch_assoc();
+
+        // Store the fetched data in an array
+        $cropDetails = array(
+            'cropID' => $row['CropID'], // Add the cropID to the response
+            'crop_name' => $row['CropName'],
+            'cultivated_area' => $row['CultivatedArea'],
+            'last_harvest_yield' => $row['LastHarvestYield'] * 90,
+            'grow_stage' => $row['GrowthStage'],
+            'water_needs' => $row['WateringNeeds'],
+            'health_status' => $row['HealthStatus'],
+            'last_harvest' => $row['LastHarvestYield']
+
+        );
+
+        
+
+        // Send JSON response with the fetched data
+        echo json_encode($cropDetails);
+    } else {
+        // No data found for the selected crop
+        echo json_encode(array('error' => 'No data found for the selected crop'));
+    }
+
+
+    // Close statement and database connection
+    $stmt->close();
+}
 
 
 ?>
@@ -741,7 +811,7 @@ if ($result === false) {
 
         <div id="CropDetails" class="tabcontent">
             <h3>Crop Details</h3>
-            <form id="crop-form" method="POST" action="">
+            <form id="crop-form" method="POST" action="edit_crops.php">
 
 
         <label for="crop-name">Crop Name:</label>
@@ -750,7 +820,7 @@ if ($result === false) {
             
 // Check if query is successful and if there are any rows returned
 if ($result && $result->num_rows > 0) {
-    echo "<select id='crop-name' name='crop-name'>";
+    echo "<select id='crop-type' name='crop-type'>";
     echo "<option value=''>Select Crop</option>"; // Option for default selection
     // Fetch and display each crop name as an option in the dropdown
     while ($row = $result->fetch_assoc()) {
@@ -760,7 +830,7 @@ if ($result && $result->num_rows > 0) {
     echo "</select>";
 } else {
     // If no crops found, display a message
-    echo "<select id='crop-name' name='crop-name'>";
+    echo "<select id='crop-type' name='crop-type'>";
     echo "<option value=''>No crops found</option>";
     echo "</select>";
 }
@@ -768,6 +838,7 @@ if ($result && $result->num_rows > 0) {
 
             ?>
 
+        <input type="hidden" id="crop-id" name="crop-id"><br>
 
 
         <label for="cultivated_area">Cultivated Area:</label>
@@ -777,7 +848,7 @@ if ($result && $result->num_rows > 0) {
         <input type="text" id="growth-stage" name="growth-stage"><br>
               
         <label for="watering-needs">Watering Needs:</label>
-        <input type="text" id="water-needs" name="watering-needs"><br>
+        <input type="text" id="watering-needs" name="watering-needs"><br>
         
         <label for="health-status">Health Status:</label>
         <input type="text" id="health-status" name="health-status"><br>
@@ -788,7 +859,6 @@ if ($result && $result->num_rows > 0) {
         </div>
         
         
-      </form>
       </form>
         </div>
 
@@ -958,10 +1028,10 @@ $conn->close();
 
    
 
-        <div class="facts">
-            <header>Did you know!</header>
-            <p>Did you know that the average farm size in Kenya is 0.5 hectares?</p>
-        </div>
+<div class="facts">
+    <header>Did you know!</header>
+    <p id="factOfTheDay"></p>
+</div>
 
         <div class="task-progress">
                       <h4>Tasks Progress</h4>
@@ -982,6 +1052,83 @@ $conn->close();
 
 
 <script>
+
+document.getElementById('crop-type').addEventListener('change', function(){
+    var selectedCrop = this.value;
+    var farmID = <?php echo $farm_id; ?>;
+    var cropID;
+    var cropType = this.value;
+    console.log('Selected crop:', selectedCrop);
+    if (selectedCrop) {
+        // Now, make AJAX request to fetch crop details and cropID
+        var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+            // Parse the JSON response
+            var cropDetails = JSON.parse(xhr.responseText);
+
+            console.log('Crop details:', cropDetails);
+
+            // Check if cropDetails is not null or undefined
+            if (cropDetails) {
+                // Extract cropID if it exists
+                var cropID = cropDetails.cropID;
+
+                document.getElementById('crop-id').value = cropID;
+
+                // Display crop details if they exist
+                if (cropDetails.cultivatedArea !== null) {
+                    document.getElementById('cultivated_area').value = cropDetails.cultivated_area;
+                }
+                if (cropDetails.growthStage !== null) {
+                    document.getElementById('growth-stage').value = cropDetails.grow_stage;
+                }
+                if (cropDetails.wateringNeeds !== null) {
+                    document.getElementById('watering-needs').value = cropDetails.water_needs;
+                }
+                if (cropDetails.healthStatus !== null) {
+                    document.getElementById('health-status').value = cropDetails.health_status;
+                }
+            } else {
+                console.error('Crop details are null or undefined.');
+            }
+        } else {
+            console.error('Error fetching crop details:', xhr.status);
+        }
+    }
+};
+
+        // Initialize the request for the crop details
+        xhr.open('POST', 'crops.php'); // Specify the correct PHP script URL here
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        // Send the selected crop as the value of 'crop-type' parameter
+        xhr.send('crop-type=' + encodeURIComponent(selectedCrop)); // Encode the selectedCrop to handle special characters
+    }
+});
+
+
+    // Array of facts
+var facts = [
+    "Kenya is a leading exporter of tea, particularly black tea, grown in regions like Kericho and Nandi Hills.",
+    "Coffee production is an important part of Kenya's agriculture sector, with high-quality Arabica coffee beans grown in areas like Nyeri and Kirinyaga.",
+    "Horticulture is a growing industry in Kenya, with flowers such as roses, carnations, and lilies being exported to international markets.",
+    "Agriculture accounts for about 75% of employment in Kenya.",
+    "The Kenyan government has implemented initiatives to promote sustainable agriculture practices, including soil conservation and water management.",
+    "Small-scale farmers play a significant role in Kenya's agriculture sector, producing crops such as maize, beans, and vegetables for local consumption and markets.",
+    "Agribusiness is a growing sector in Kenya, with investments in processing, packaging, and value addition for agricultural products.",
+    "Kenya's agricultural sector faces challenges such as climate change, pests, and diseases, but initiatives are underway to improve resilience and productivity.",
+    "Soybean farming is gaining popularity among farmers in Kenya, with the crop being used for both human consumption and animal feed.",
+    "Greenhouse farming is becoming increasingly common in Kenya, allowing for year-round cultivation of high-value crops like tomatoes and capsicum."
+];
+
+
+// Get today's date
+var today = new Date();
+// Use the day of the year as an index to select a fact
+var factIndex = today.getDate() % facts.length;
+// Display the fact of the day
+document.getElementById("factOfTheDay").textContent = facts[factIndex];
 
 // Function to display task alerts
 function displayTaskAlerts() {
@@ -1187,7 +1334,7 @@ function updateTaskProgressChart() {
             const options = {
                 chart: {
                     width: 250,
-                    height: 300,
+                    height: 250,
                     type: "radialBar"
                 },
                 labels: ["Tasks Completed"],

@@ -133,27 +133,107 @@ body::-webkit-scrollbar {
     box-shadow: 20px 20px 20px 35px rgb(0, 0, 0, 0.3);
 
 }
-.main-content .top{
-    display: grid;
-    grid-template-columns: 23rem auto;
-    gap: 1rem;
+ /* Styles for tabs container */
+ .tab-container {
+    display: flex;
+    height: 90vh;
 }
-.main-content .top .crop-dist{
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    box-shadow: 10px 0px 20px 5px rgb(0, 0, 0, 0.1);
-    padding: 1rem;
+
+/* Styles for tab links */
+.tab {
+    width: 200px; /* Adjust width as needed */
+    background-color: #f1f1f1;
+    border-right: 1px solid #ccc;
 }
-.main-content .top .line-chart{
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    box-shadow: 10px 0px 20px 5px rgb(0, 0, 0, 0.1);
-    padding: 1rem;   
+
+.tab button {
+    display: block;
+    background-color: inherit;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: 0.3s;
+    width: 100%;
+    text-align: left;
+    font-size: 17px;
+    font-family: 'Montserrat', sans-serif;
 }
-.main-content .down .bar-chart{
-    margin-top: 1rem;
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    box-shadow: 10px 0px 20px 5px rgb(0, 0, 0, 0.1);
-    padding: 1rem;   
+
+.tab button:hover {
+    background-color: #ddd;
+}
+
+.tab button.active {
+    background-color: #ccc;
+}
+
+/* Styles for tab content */
+.tabcontent {
+    flex: 1;
+    padding: 20px;
+    border-top: 1px solid #ccc;
+    display: none;
+}
+.tabcontent #instructions p{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    color: #45a049cc;
+}
+.tabcontent ul li{
+line-height: 2rem;
+}
+.tabcontent a{
+    font-weight: bolder;
+    color: #45a049cc;
+}
+
+/* Show the first tab content by default */
+.tabcontent:first-child {
+    display: block;
+}
+.tabcontent strong{
+    color: #45a049cc;
+}
+
+/* Feedback form styles */
+.feedback-form {
+    max-width: 500px;
+    margin: 0 auto;
+    float: left;
+
+}
+
+.feedback-form label {
+    font-weight: bold;
+}
+.feedback-form p{
+    text-align: left;
+}
+
+.feedback-form textarea,
+.feedback-form input[type="text"],
+.feedback-form input[type="email"],
+.feedback-form input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.feedback-form textarea {
+    height: 150px;
+}
+
+.feedback-form input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.feedback-form input[type="submit"]:hover {
+    background-color: #45a049;
 }

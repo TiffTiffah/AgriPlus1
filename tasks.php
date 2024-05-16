@@ -98,13 +98,13 @@ $conn->close();
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="script.js"></script>
-    <title>Dashboard</title>
+    <title>AgriPlus | Tasks</title>
 </head>
 <body>
        <div class="dash-container">
         <!-- ----------------------------sidebar-------------------------------- -->
         <div class="side-bar">
-            <div class="logo">
+        <div class="logo">
                 <img src="images/logo (1).png" alt="logo">
                 <h3>AGRI</h3><span>PLUS</span>
             </div>
@@ -114,6 +114,7 @@ $conn->close();
                     <li><a href="crops.php"><i class='fa-solid fa-seedling'></i>Crops</a></li>
                     <li><a href="tasks.php" class="active"><i class='bx bx-task'></i>Tasks</a></li>
                     <li><a href="analytics.php"><i class='bx bxs-report' ></i>Analytics</a></li>
+                    <li><a href="help.php"><i class='bx bx-help-circle' ></i></i>Help</a></li>
                     <li><a href="logout.php"><i class='bx bx-exit'></i>Logout</a></li>
                 </ul>
         </div>
@@ -321,30 +322,19 @@ echo '</div>'; // Close tasks-wrapper
 
 
         <!-- ----------------------------------Right side-------------------------------- -->
-        <!-- <div class="right-side">
-            <div class="calendar-container">
-                <div class="calendar-header">
-                  <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
-                  <div id="month-year"></div>
-                  <button id="next-month"><i class="fas fa-chevron-right"></i></button>
-                </div>
-                <div id="calendar"></div>
-              </div>
-
-              <div class="task-progress">
-                <h4>Tasks Progress</h4>
-                <div class="chart">
-                    <div id="chart">
-                    </div>
-                </div>
-
-              </div>
-
-        </div> -->
 
 
 
-        <script>
+
+<script>
+    // Get the input element for due date
+var dueDateInput = document.getElementById('dueDate');
+
+// Get today's date in the format yyyy-mm-dd
+var today = new Date().toISOString().split('T')[0];
+
+// Set the minimum date to today
+dueDateInput.min = today;
 
 
         // Add event listener to checkboxes

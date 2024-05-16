@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Log user login activity
             $login_time = date("Y-m-d H:i:s");
-            $log_message = "User logged in at ";
+            $log_message = "User logged in  ";
             $log_sql = "INSERT INTO activity_log (user_id, activity_message, timestamp) VALUES (?, ?, ?)";
             $log_stmt = $conn->prepare($log_sql);
             $log_stmt->bind_param("iss", $user_id, $log_message, $login_time);

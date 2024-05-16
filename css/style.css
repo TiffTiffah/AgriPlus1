@@ -16,85 +16,94 @@ header {
     top: 0;
     left: 0;
     width: 100%;
-    background-color:transparent;
+    background-color: transparent;
     /* backdrop-filter: blur(10px); */
     height: 100px;
-    padding: 0 0 0 50px;
+    padding: 0 50px 0 0; /* Adjust padding to move the logo to the left */
     display: flex;
     align-items: center;
+    justify-content: space-between; /* Align items to the start and end of the header */
     z-index: 1000;
 }
 
 header img {
     width: 150px; 
     height: auto; 
-    flex: 1;
 }
+
 header.scrolled {
-background-color: rgba(255, 255, 255, 0.3);
-backdrop-filter: blur(10px);
-transition: background-color 0.3s;
-}
-.menu{
-flex: 1;
-background-color: plum;
-}
-.menu ul {
-list-style: none;
-margin: 0 auto; /* Center the list horizontally */
-padding: 0;
-text-align: center; /* Center the text within the list items */
+    background-color: white;
+    backdrop-filter: blur(10px);
+    transition: background-color 0.3s;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.menu ul li {
-display: inline-block;
-margin-left: 20px;
+.nav {
+    display: flex;
+    justify-content: space-between; /* Distribute items along the main axis */
+    gap: 20rem;
+    align-items: center; /* Center items along the cross axis */
+    display: none;
 }
 
-.menu ul li:first-child {
-margin-left: 0; /* Remove left margin from the first list item */
-}
-.menu ul li a {
-text-decoration: none;
-color: #333;
-transition: color 0.3s;
+.nav .menu {
+    display: flex;
 }
 
-.menu ul li a:hover {
-color: #666;
+.nav .menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
 }
 
-.logins {
-position: absolute;
-right: 0;
-margin-right: 100px;
-padding: 15px;
-flex: 1;
+.nav .menu ul li {
+    margin: 0 2rem;
+}
+
+.nav .menu ul li a {
+    color: #296834;
+    font-size: 17px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 100;
+    text-decoration: none;
+    padding: 5px;
+}
+
+.nav .menu ul li a:hover {
+    color:  #296834;
+    border-bottom: #296834 2px solid;
 }
 
 .logins ul {
-list-style: none;
-margin: 0;
-padding: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
 }
 
 .logins ul li {
-display: inline-block;
-margin-left: 20px;
+    margin: 0 1rem;
 }
 
 .logins ul li a {
-text-decoration: none;
-color: #333;
-transition: color 0.3s;
+    color: #296834;
+    font-size: 17px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 100;
+    text-decoration: none;
 }
 
 .logins ul li a:hover {
-color: #666;
+    color: #296834;
+    transition: 0.5s ease;
 }
 
+
+
 .hero{
-    
+    background-image: url('/images/homepage\ \(1\).png');
     background-size: cover;
     background-position: center; height: 110vh;
 }
@@ -174,7 +183,7 @@ button:hover {
 .sc-part-two .about-banner::before{
     content: "About";
     position: absolute;
-    color: #28ad66;
+    color: #296834;
     font-size: 8.2rem;
     font-weight: 900;
     opacity: .1;
@@ -183,7 +192,7 @@ button:hover {
 }
 
 .sc-part-two .about-banner h3{
-    color: #28ad66;
+    color: #296834;
 }
 .sc-part-two .about-banner strong{
     font-size: 1.6rem;
@@ -219,7 +228,7 @@ button:hover {
     
 }
 .services h1{
-    color: #4D9B44;
+    color: #296834;
     font-size: 28px;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -270,7 +279,7 @@ button:hover {
 .services .cards .card .icon i{
     font-size: 40px;
     color: #fff;
-    background-color: rgb(77, 155, 68, 0.8);
+    background-color: rgb(41, 104, 52, .8);
     padding: 2.5rem;
     border-radius: 50%;
 
@@ -280,7 +289,7 @@ button:hover {
 /* ==================================================footer============================= */
 footer{
     height: 80vh;
-    background:#4D9B44;
+    background:#296834;
 } 
 .footer-sec{
     

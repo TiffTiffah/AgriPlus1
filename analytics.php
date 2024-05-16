@@ -302,14 +302,14 @@ $conn->close();
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script src="script.js"></script>
-    <title>Dashboard</title>
+    <title>AgriPlus | Analytics</title>
 </head>
 <body>
        <div class="dash-container">
         <!-- ----------------------------sidebar-------------------------------- -->
         <div class="side-bar">
-            <div class="logo">
-                <img src="images/logo.png" alt="logo">
+        <div class="logo">
+                <img src="images/logo (1).png" alt="logo">
                 <h3>AGRI</h3><span>PLUS</span>
             </div>
             <div class="menu">
@@ -318,6 +318,7 @@ $conn->close();
                     <li><a href="crops.php"><i class='fa-solid fa-seedling'></i>Crops</a></li>
                     <li><a href="tasks.php"><i class='bx bx-task'></i>Tasks</a></li>
                     <li><a href="analytics.php"  class="active"><i class='bx bxs-report' ></i>Analytics</a></li>
+                    <li><a href="help.php"><i class='bx bx-help-circle' ></i></i>Help</a></li>
                     <li><a href="logout.php"><i class='bx bx-exit'></i>Logout</a></li>
                 </ul>
         </div>

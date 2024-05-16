@@ -54,10 +54,9 @@ body::-webkit-scrollbar {
     box-shadow: 0 20px 35px rgb(0, 0, 0, 0.3);
 }
 .logo{
-    margin-top: 3rem;
+    margin-top: 1rem;
     display: flex;
     align-items: center;
-    margin-left: 2rem;
 
 }
 .logo img{

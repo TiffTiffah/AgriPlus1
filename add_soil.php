@@ -63,7 +63,7 @@ if ($bind_result === false) {
 
 // Execute the prepared statement
 if ($stmt->execute() === TRUE) {
-    echo "loca<script>window.location.href='dashboard.php';</script>";
+    header("Location: dashboard.php");
 } else {
     echo "Error executing SQL statement: " . $stmt->error;
 }

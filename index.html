@@ -11,25 +11,28 @@
 
 </head>
 <body >
-    <header>
+    <header >
         <div class="logo">
             <a href="index.html"><img src="images/logo (1).png" alt=""></a>
         </div>
-        <!-- <div class="menu">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Services</a></li>
-            </ul>
+        <div id="mainHeader" class="nav">
+            <div class="menu">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Services</a></li>
+                </ul>
+            </div>
+            <div class="logins">
+                <ul>
+                    <li><a href="signup.php">Sign Up</a></li>
+                    <li><a href="signin.html">Sign In</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="logins">
-            <ul>
-                <li><a href="signup.html">Sign Up</a></li>
-                <li><a href="signin.html">Sign In</a></li>
-            </ul>
-        </div> -->
     </header>
-    <section class="hero" style=" background-image: url('images/homepage\ \(1\).png');">
+    
+    <section class="hero" >
         
         
         <div class="banner">
@@ -38,19 +41,19 @@
                  to revolutionize crop management. Our platform harnesses the power of
                   machine learning to predict crop yields accurately. Say goodbye to
                     uncertainties and welcome a new era of precision agriculture.</h3>
-            <button><a href="signup.html">Get Started</a></button>
+            <button><a href="signup.php">Get Started</a></button>
             </div>
     </section>
 
 <!-- =================================================================ABOUT US============================================== -->
 
-<section class="sc-part-two">
+<section id="about" class="sc-part-two">
     <div class="about-image" style="background: url('images/banner.png'); background-size: cover; background-repeat: no-repeat;">
   
     </div>
   
     <div class="about-banner">
-     <h1 style="color: #28ad66 ;">About Us</h1>
+     <h1 style="color: #296834 ;">About Us</h1>
      <h2 style="margin-top: 1rem;">We Empower Agriculture, Cultivating Prosperity</h2>
      <p>AgriPlus is a crop management platform that leverages machine learning to predict crop yields accurately. Our platform is designed to help smallholder farmers optimize their crop yields and increase their income. We provide farmers with real-time insights and recommendations to help them make informed decisions about their crops. Our goal is to revolutionize crop management and empower farmers to achieve sustainable agriculture.
 
@@ -61,7 +64,7 @@
   
   </section>
   <!-- =============================================================what we are doing======================================================== -->
-  <section class="services">
+  <section id="services" class="services">
     <div class="content">
         <div class="texts">
 
@@ -194,10 +197,13 @@
     window.onscroll = function() {scrollFunction()};
 
 function scrollFunction() {
+    var menu = document.getElementById('mainHeader');
     if (document.body.scrollTop > 10 || document.documentElement.scrollTop > 10) {
         document.querySelector("header").classList.add("scrolled");
+        menu.style.display = 'flex';
     } else {
         document.querySelector("header").classList.remove("scrolled");
+        menu.style.display = 'none';
     }
 }
 

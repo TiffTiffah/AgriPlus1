@@ -736,7 +736,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['crop-type'])) {
 
         <div id="FarmDetails" class="tabcontent">
             <h3>Farm Details</h3>
-            <form method="post" action="">
+            <form method="post" action="edit_farm.php">
             <div class="form-group">
                 <label for="farm_name">Farm Name:</label>
                 <input type="text" id="farm_name" name="farm_name" value="<?php echo isset($farmData['FarmName']) ? $farmData['FarmName'] : ''; ?>" >

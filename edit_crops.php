@@ -84,14 +84,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 
   }
-    } elseif (isset($_POST['delete'])) {
-        
+     elseif (isset($_POST['delete'])) {
+       $cropType = trim(htmlspecialchars($_POST['crop-type']));
+       $crop_id = trim(htmlspecialchars($_POST['crop-id']));
+       // Delete the crop
+       $sql_delete_crop = "DELETE FROM crops WHERE CropID = ?";
+       $stmt_delete_crop = $conn->prepare($sql_delete_crop);
 
+       if ($stmt_delete_crop === false) {
+           die("Error preparing SQL statement: " . $conn->error);
+       }
 
-        
-    } else {
-        // Invalid request method
-        http_response_code(405);
-    }
+       // Bind parameters
+       $stmt_delete_crop->bind_param("i", $crop_id);
 
+       // Execute SQL statement
+       if ($stmt_delete_crop->execute()) {
+           // Crop deleted successfully
+
+           // Log user activity
+           $delete_time = date("Y-m-d H:i:s");
+           $log_message = "User deleted crop: $cropType ";
+           $log_sql = "INSERT INTO activity_log (user_id, activity_message, timestamp) VALUES (?, ?, ?)";
+           $log_stmt = $conn->prepare($log_sql);
+           $log_stmt->bind_param("iss", $user_id, $log_message, $delete_time);
+           $log_stmt->execute();
+           $log_stmt->close();
+
+           // Redirect to dashboard or any other page
+           header("Location: dashboard.php");
+           exit();
+       } else {
+           // Error occurred while deleting crop
+           $error_message = "Error deleting crop: " . $conn->error;
+           // Display error message for debugging
+           echo "Error: $error_message";
+       }
+       $stmt_delete_crop->close();
+   } else {
+       // Invalid request method
+       http_response_code(405);
+   }
+}
 ?>

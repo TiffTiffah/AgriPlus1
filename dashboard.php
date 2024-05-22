@@ -712,7 +712,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['crop-type'])) {
         <!-- Tab content -->
         <div id="UserProfile" class="tabcontent">
     <h3>User Profile</h3>
-    <form method="post" action="edit_profile.php">
+    <form method="post" id="userForm" action="edit_profile.php">
         <label for="fullname">Fullname:</label>
         <input type="text" id="fullname" name="fullname" value="<?php echo isset($userData['FullName']) ? $userData['FullName'] : 'user not found'; ?>" ><br>
 
@@ -729,8 +729,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['crop-type'])) {
         <input type="password" id="confirm_password" name="confirm_password" ><br>
 
         <button class="edit-button" type="submit" name="edit">Edit</button>
-        <button class="delete-button" type="submit" name="delete">Delete</button>
+        <button class="delete-button" type="submit" id="deleteUser" name="delete">Delete</button>
     </form>
+            <!-- Confirm modal -->
+            <div id="confirmModalOne" class="confirm-modal">
+    <div class="popup">
+        <a class="close1" href="#">&times;</a>
+        <h2>Confirm</h2>
+        <div class="content">
+        Are you sure you want to delete your account? This action cannot be undone.
+        </div>
+        <button class="confirm-btn" id="confirmDelete">Yes</button>
+        <button class="confirm-btn" id="confirmNoDelete">No</button>
+    </div>
+    </div>
 </div>
 
 
@@ -855,9 +867,22 @@ if ($result && $result->num_rows > 0) {
 
         <div class="form-group">
             <button class="edit-button" type="submit" name="edit">Edit</button>
-            <button class="delete-button" type="submit" name="delete">Delete</button>
+            <button class="delete-button" type="submit" id="delete" name="delete">Delete</button>
         </div>
-        
+
+
+        <!-- Confirm modal -->
+    <div id="confirmModal" class="confirm-modal">
+    <div class="popup">
+        <a class="close1" href="#">&times;</a>
+        <h2>Confirm</h2>
+        <div class="content">
+            Are you sure you want to delete this crop?
+        </div>
+        <button class="confirm-btn" id="confirmYes">Yes</button>
+        <button class="confirm-btn" id="confirmNo">No</button>
+    </div>
+    </div>
         
       </form>
         </div>
@@ -1387,6 +1412,54 @@ function updateTaskProgressChart() {
 updateTaskProgressChart();
 
 
+//confirm modal
+document.getElementById('delete').addEventListener('click', function() {
+        document.getElementById('confirmModal').style.display = 'block';
+    });
+
+    document.querySelector('.close1').addEventListener('click', function() {
+        document.getElementById('confirmModal').style.display = 'none';
+    });
+
+    document.getElementById('confirmYes').addEventListener('click', function() {
+        document.getElementById('crop-form').submit();
+    });
+
+    document.getElementById('confirmNo').addEventListener('click', function() {
+        window.location.href = 'dashboard.php';
+    });
+
+//deleting user profile
+    document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+    document.getElementById('deleteUser').addEventListener('click', function() {
+        document.getElementById('confirmModalOne').style.display = 'block';
+    });
+            // Handle deletion based on user response
+            document.getElementById('confirmDelete').addEventListener('click', function() {
+            // Proceed with AJAX request
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'delete_user.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    alert('User account deleted successfully.');
+                    // Redirect to sign-in page or do any other necessary action
+                    window.location.href = 'signin.html';
+                } else if (xhr.readyState === 4 && xhr.status !== 200) {
+                    alert('Failed to delete user account.');
+                }
+            };
+            xhr.send('delete=1');
+        });
+
+        // Handle cancellation
+        document.getElementById('confirmNoDelete').addEventListener('click', function() {
+            // User cancelled deletion, do nothing or handle redirection
+            window.location.href = 'dashboard.php';
+        });
+
+    });
 
 
 </script>

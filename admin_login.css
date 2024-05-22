@@ -1,0 +1,65 @@
+/* poppins font */
+@font-face {
+    font-family: 'Poppins';
+    src: url('assets/fonts/Poppins/Poppins-Light.ttf') format('truetype');
+}
+/* montserrat font */
+@font-face {
+    font-family: 'Montserrat';
+    src: url('assets/fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype');
+}
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4CAF50;;
+}
+
+#message {
+    margin-top: 20px;
+    text-align: center;
+    color: red;
+}

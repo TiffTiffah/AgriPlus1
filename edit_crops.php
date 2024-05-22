@@ -87,6 +87,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      elseif (isset($_POST['delete'])) {
        $cropType = trim(htmlspecialchars($_POST['crop-type']));
        $crop_id = trim(htmlspecialchars($_POST['crop-id']));
+           // Show delete confirmation modal
+    echo "<script>
+    document.getElementById('confirmModal').style.display = 'block';
+    document.getElementById('confirmYes').addEventListener('click', function() {
+        document.getElementById('crop-form').submit();
+        window.location.href = 'dashboard.php';
+    });
+    document.getElementById('confirmNo').addEventListener('click', function() {
+        window.location.href = 'dashboard.php';
+    });
+  </script>";
        // Delete the crop
        $sql_delete_crop = "DELETE FROM crops WHERE CropID = ?";
        $stmt_delete_crop = $conn->prepare($sql_delete_crop);
@@ -120,6 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
            // Display error message for debugging
            echo "Error: $error_message";
        }
+       
        $stmt_delete_crop->close();
    } else {
        // Invalid request method

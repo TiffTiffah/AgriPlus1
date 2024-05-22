@@ -79,9 +79,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (isset($_POST['delete'])) {
         // Display confirmation popup
         echo "<script>
-        var confirmation = confirm('Are you sure you want to delete your account?');
-        if (confirmation) {
-            // User confirmed deletion, proceed with AJAX request
+        //deleting user profile
+    document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+    document.getElementById('deleteUser').addEventListener('click', function() {
+        document.getElementById('confirmModalOne').style.display = 'block';
+    });
+            // Handle deletion based on user response
+            document.getElementById('confirmDelete').addEventListener('click', function() {
+            // Proceed with AJAX request
             var xhr = new XMLHttpRequest();
             xhr.open('POST', 'delete_user.php', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -95,11 +101,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             };
             xhr.send('delete=1');
-        } else {
-            // User cancelled deletion, redirect to dashboard.php
+        });
+
+        // Handle cancellation
+        document.getElementById('confirmNoDelete').addEventListener('click', function() {
+            // User cancelled deletion, do nothing or handle redirection
             window.location.href = 'dashboard.php';
-        }
-      </script>";
+        });
+
+    });
+</script>";
     } else {
         // Invalid request method
         http_response_code(405);

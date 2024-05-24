@@ -1,4 +1,50 @@
 <?php
+session_start();
+
+// Check if user is logged in (assuming you have a user authentication system)
+if (!isset($_SESSION["user_id"])) {
+    // Redirect to the sign-in page or display an error message
+    header("Location: signin.html");
+    exit();
+}
+
+    // Connect to your database (modify database credentials as needed)
+    $conn = new mysqli("localhost", "root", "", "agri");
+
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+
+// Fetch user data from the database (assuming you have a users table)
+$sql = "SELECT FullName, Username, Email FROM users WHERE UserID = ?"; // Replace user_id with the appropriate column name for identifying users
+$stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    // Error handling if query preparation fails
+    die("Error preparing statement: " . $conn->error);
+}
+
+// Bind parameters
+$stmt->bind_param("i", $_SESSION["user_id"]);
+
+if (!$stmt->execute()) {
+    // Error handling if query execution fails
+    die("Error executing statement: " . $stmt->error);
+}
+
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    // Fetch user data
+    // Initialize $userData variable
+    $userData = array();
+    $userData = $result->fetch_assoc();
+} else {
+    echo "User not found.";
+}
+
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
@@ -144,11 +190,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div id="feedback" class="tabcontent">
                 <h2>Feedback Form:</h2>
                 <p>We value your feedback! Please use the form below to share any comments, suggestions, or concerns you have about the system.</p>
-    <form class="feedback-form" action="help.php" method="post">
+    <form class="feedback-form" action="feedback.php" method="post">
         <label for="name">Your Name:</label><br>
-        <input type="text" id="name" name="name"><br>
+        <input type="text" id="name" name="name" value="<?php echo isset($userData['FullName']) ? $userData['FullName'] : 'user not found'; ?>"><br>
         <label for="email">Your Email:</label><br>
-        <input type="email" id="email" name="email"><br><br>
+        <input type="email" id="email" name="email" value="<?php echo isset($userData['Email']) ? htmlspecialchars($userData['Email']) : ''; ?>"><br><br>
         <label for="feedback">Feedback:</label><br>
         <textarea id="feedback" name="feedback" rows="4" cols="50" required></textarea><br>
         

@@ -26,7 +26,10 @@ $coordinates = array(
     "Nairobi" => array("lat" => -1.286389, "lon" => 36.817223),
     "Mombasa" => array("lat" => -4.0435, "lon" => 39.6682),
     "Kisumu" => array("lat" => -0.1022, "lon" => 34.7617),
-    "Trans Nzoia" => array("lat" => 1.0414, "lon" => 34.9444)
+    "Trans Nzoia" => array("lat" => 1.0414, "lon" => 34.9444),
+    "Nakuru" => array("lat" => -0.3031, "lon" => 36.0800),
+    "Kisii" => array("lat" => -0.6816, "lon" => 34.7736),
+    "Machakos" => array("lat" => -1.5221, "lon" => 37.2634),
 );
 
 //echo user ID to javascript
@@ -229,24 +232,30 @@ function insertWeatherDataIntoDatabase($temperatureMean, $precipitationTotal, $c
             die("Connection failed: " . $conn->connect_error);
         }
 
-        // Prepare SQL statement to insert weather data
-        $sql = "INSERT INTO weather_data (temperature, rainfall, month, farmID, location, country) VALUES (?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-
         // Define country variable
         $country = "Kenya";
 
-        // Bind parameters
-        $stmt->bind_param("ddsiss", $temperatureMean, $precipitationTotal, $currentMonth, $farm_id, $location, $country);
+        // Prepare SQL statement to check if weather data for the given farm and month exists
+        $checkSql = "SELECT COUNT(*) FROM weather_data WHERE month = ? AND farmID = ?";
+        $checkStmt = $conn->prepare($checkSql);
+        $checkStmt->bind_param("si", $currentMonth, $farm_id);
+        $checkStmt->execute();
+        $checkStmt->bind_result($count);
+        $checkStmt->fetch();
+        $checkStmt->close();
 
-        // Execute statement
-        $stmt->execute();
+        if ($count > 0) {
+            
+        } else {
+            // If weather data does not exist, insert new data
+            $insertSql = "INSERT INTO weather_data (temperature, rainfall, month, farmID, location, country) VALUES (?, ?, ?, ?, ?, ?)";
+            $insertStmt = $conn->prepare($insertSql);
+            $insertStmt->bind_param("ddsiss", $temperatureMean, $precipitationTotal, $currentMonth, $farm_id, $location, $country);
+            $insertStmt->execute();
+            $insertStmt->close();
+            // echo "Weather data inserted successfully.";
+        }
 
-        // echo "Weather data inserted successfully.";
-
-        // Close statement
-        $stmt->close();
-        
         // Close connection
         $conn->close();
     } catch (Exception $error) {
@@ -256,9 +265,10 @@ function insertWeatherDataIntoDatabase($temperatureMean, $precipitationTotal, $c
 
 
 
+
 // Check if it's the fifth day of the month
 function isFirstDayOfMonth() {
-    return date('j') === '1';
+    return date('j') === '23';
 }
 
 // Example usage
@@ -763,13 +773,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['crop-type'])) {
         <option value="Kisumu" <?php echo isset($farmData['Location']) && $farmData['Location'] == 'Kisumu' ? 'selected' : ''; ?>>Kisumu</option>
         <option value="Kiambu" <?php echo isset($farmData['Location']) && $farmData['Location'] == 'Kiambu' ? 'selected' : ''; ?>>Kiambu</option>
         <option value="Trans Nzoia" <?php echo isset($farmData['Location']) && $farmData['Location'] == 'Trans Nzoia' ? 'selected' : ''; ?>>Trans Nzoia</option>
+        <option value="Nakuru" <?php echo isset($farmData['Location']) && $farmData['Location'] == 'Nakuru' ? 'selected' : ''; ?>>Nakuru</option>
+        <option value="Kisii" <?php echo isset($farmData['Location']) && $farmData['Location'] == 'Kisii' ? 'selected' : ''; ?>>Kisii</option>
+        <option value="Machakos" <?php echo isset($farmData['Location']) && $farmData['Location'] == 'Machakos' ? 'selected' : ''; ?>>Machakos</option>
     </select>
 </div>
 
 
             <div class="form-group">
                 <label for="farm_name">Farm Size(in Acres):</label>
-                <input type="text" id="farm_size" name="farm_size" value="<?php echo isset($farmData['FarmSize']) ? $farmData['FarmSize'] : ''; ?>">
+                <input type="text" id="farm_size" name="farm_size" step="0.001" value="<?php echo isset($farmData['FarmSize']) ? $farmData['FarmSize'] : ''; ?>">
             </div>
 
             <div class="form-group">
@@ -854,7 +867,7 @@ if ($result && $result->num_rows > 0) {
 
 
         <label for="cultivated_area">Cultivated Area:</label>
-        <input type="number" id="cultivated_area" name="cultivated_area"><br>
+        <input type="number" id="cultivated_area" step="0.001" name="cultivated_area"><br>
         
         <label for="growth-stage">Growth Stage:</label>
         <input type="text" id="growth-stage" name="growth-stage"><br>
@@ -1039,9 +1052,85 @@ if ($result->num_rows > 0) {
     echo "<p>No weather data available.</p>";
 }
 
-// Close statement and database connection
+
+    //fetch farm_size
+    $sql = "SELECT FarmSize FROM farms WHERE FarmID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $farm_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $farm = $result->fetch_assoc();
+    $farm_size = $farm['FarmSize'];
+// SQL query to fetch all necessary data
+$sql = "
+    SELECT c.CropName, c.HealthStatus, c.LastHarvestYield, y.yield_predicted, y.month
+    FROM crops c
+    JOIN yields y ON c.CropID = y.cropID
+    WHERE c.FarmID = ?";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $farm_id); // Assuming 'farm_id' is set in the session
+$stmt->execute();
+$result = $stmt->get_result();
+
+$data = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $data[] = $row;
+    }
+}
+
 $stmt->close();
 $conn->close();
+
+// Sort the data by month
+usort($data, function($a, $b) {
+    return strtotime($b['month']) - strtotime($a['month']); // Sorting in descending order
+});
+
+// Filter the most recent entries by crop name
+$latestEntries = [];
+foreach ($data as $row) {
+    if (!isset($latestEntries[$row['CropName']])) {
+        $latestEntries[$row['CropName']] = $row;
+    }
+}
+
+// Generate HTML table
+echo '<div class="table-responsive">';
+echo '<h4>Crops Report</h4>';
+
+$table = '<table border="1">
+            <tr>
+                <th>Crop Name</th>
+                <th>Health Status</th>
+                <th>Last Harvest Yield (bags)</th>
+                <th>Expected Yield (bags)</th>
+                <th>Percentage Change</th>
+                <th>Month</th>
+            </tr>';
+
+foreach ($latestEntries as $row) {
+    $lastYield = intval($row['LastHarvestYield']);
+    $expectedYield = intval($row['yield_predicted'] / 90); // Assuming 1 bag = 90 units
+    //divide by farmsize
+    $expectedYield = intval($expectedYield / $farm_size);
+    $percentageChange = ($lastYield != 0) ? (($expectedYield - $lastYield) / $lastYield) * 100 : 0;
+
+    $table .= '<tr>';
+    $table .= '<td>' . $row['CropName'] . '</td>';
+    $table .= '<td>' . $row['HealthStatus'] . '</td>';
+    $table .= '<td>' . $lastYield . '</td>';
+    $table .= '<td>' . $expectedYield . '</td>';
+    $table .= '<td>' . round($percentageChange, 2) . '%</td>';
+    $table .= '<td>' . $row['month'] . '</td>';
+    $table .= '</tr>';
+}
+
+$table .= '</table>';
+echo $table;
+
+echo '</div>';
 ?>
 
         </div>

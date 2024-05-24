@@ -14,7 +14,8 @@ def retrieve_daily_weather_data(location):
         "Nairobi": {"lat": -1.286389, "lon": 36.817223},
         "Mombasa": {"lat": -4.0435, "lon": 39.6682},
         "Kisumu": {"lat": -0.1022, "lon": 34.7617},
-        "Trans Nzoia": {"lat": 1.0414, "lon": 34.9444}
+        "Trans Nzoia": {"lat": 1.0414, "lon": 34.9444},
+        "Machakos": {"lat": -1.5221, "lon": 37.0637},
     }
 
     # Get coordinates based on the selected location

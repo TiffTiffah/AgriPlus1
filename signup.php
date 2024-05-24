@@ -113,7 +113,7 @@ function test_input($data) {
         
         <form method="post" action="signup.php">
             <label for="fullname">Fullname:</label>
-            <input type="text" id="fullname" name="fullname" required><br>
+            <input type="text" id="fullname" pattern="[A-Za-z ]+" title="Please enter only letters for fullname." name="fullname" required><br>
     
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required><br>
@@ -154,6 +154,8 @@ function scrollFunction() {
         document.querySelector("header").classList.remove("scrolled");
     }
 }
+
+
 
 </script>
 </html>

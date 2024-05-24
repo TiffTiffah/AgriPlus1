@@ -375,7 +375,7 @@ font-weight: 500;
 .modal-content {
     display: flex;
     height: 80%;
-    width: 40%;
+    width: 60%;
     margin-top: 5%; /* Reduce the top margin */
     position: relative; /* Ensure it's a positioning context */
     border-radius: 10px;

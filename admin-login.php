@@ -1,14 +1,9 @@
 <?php
+// Start session
 session_start();
 
-// Database configuration
-// Connect to the database
+// Database configuration and connection
 include 'db_connection.php';
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 
 $error_message = "";
 
@@ -29,7 +24,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Verify password
         if (password_verify($password, $hashed_password)) {
+            // Set session variables
             $_SESSION['admin_id'] = $id;
+            
+            // Redirect to admin dashboard
             header("Location: admin_dashboard.php");
             exit(); // Ensure script termination after redirect
         } else {
@@ -40,10 +38,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $stmt->close();
-} else {
-    $error_message = "Form was not submitted correctly.";
-}
 
+}
+// Close database connection
 $conn->close();
 ?>
 <!DOCTYPE html>
@@ -55,6 +52,11 @@ $conn->close();
     <link rel="stylesheet" href="admin_login.css">
 </head>
 <body>
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="images/logo (1).png" alt=""></a>
+        </div>
+    </header>
     <div class="login-container">
         <h2>Admin Login</h2>
         <form id="loginForm" method="POST" action="admin-login.php">

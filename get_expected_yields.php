@@ -17,6 +17,16 @@ if ($conn->connect_error) {
 if (isset($_POST['farmID']) && isset($_POST['cropID'])) {
     $farmID = $_POST['farmID'];
     $cropID = $_POST['cropID'];
+
+    //fetch farm_size
+    $sql = "SELECT FarmSize FROM farms WHERE FarmID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $farmID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $farm = $result->fetch_assoc();
+    $farm_size = $farm['FarmSize'];
+
     
     // Prepare SQL statement to fetch most recent yield prediction from yield_prediction table based on cropID and farmID
     $sql_yield = "SELECT yield_predicted FROM yieldprediction WHERE CropID = ? AND FarmID = ? ORDER BY month DESC LIMIT 1";
@@ -37,7 +47,10 @@ if (isset($_POST['farmID']) && isset($_POST['cropID'])) {
                 // Fetch result
                 if ($stmt_yield->fetch()) {
                     // Convert yield to bags (divide by 90 and ignore decimals)
-                    $expectedYieldInBags = floor($expectedYield / 90);
+                    $expectedYieldInBag = floor($expectedYield / 90);
+
+                    //divide by farm size
+                    $expectedYieldInBags = intval($expectedYieldInBag / $farm_size);
                     
                     // Return the expected yield in bags as JSON
                     echo json_encode(array("expectedYield" => $expectedYieldInBags));

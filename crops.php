@@ -274,11 +274,11 @@ function test_input($data) {
         <label for="harvest-date">Expected Harvest Date:</label>
         <input type="date" id="harvest-date" name="harvest-date" required><br><br>
 
-        <label for="last_yield">Last Harvest Yield:</label>
+        <label for="last_yield">Last Harvest Yield (in bags):</label>
         <input type="number" id="last_yield" name="last_yield"><br><br>
 
-        <label for="cultivated_area">Cultivated Area:</label>
-        <input type="number" id="cultivated_area" name="cultivated_area"><br><br>
+        <label for="cultivated_area">Cultivated Area (in acres):</label>
+        <input type="number" id="cultivated_area" step="0.001" name="cultivated_area"><br><br>
               
         <label for="watering-needs">Watering Needs:</label>
         <input type="text" id="watering-needs" name="watering-needs"><br><br>

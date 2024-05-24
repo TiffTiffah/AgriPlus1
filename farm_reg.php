@@ -8,6 +8,14 @@ if (!isset($_SESSION["user_id"])) {
     header("Location: signup.html"); // Redirect to login page
     exit();
 }
+//get fullname of the user
+$sql = "SELECT fullname FROM users WHERE userID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $_SESSION["user_id"]);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$fullname = $user['fullname'];
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -28,7 +36,7 @@ if ($conn->connect_error) {
 
 
 // Define SQL query string
-$sql = "INSERT INTO farms (UserID, FarmName, Location, FarmSize, IrrigationSystem, SoilType) VALUES (?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO farms (UserID, FarmName, Location, FarmSize, IrrigationSystem, SoilType, owner) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 // Prepare and bind parameters
 $stmt = $conn->prepare($sql);
@@ -36,7 +44,7 @@ if (!$stmt) {
     die("Error preparing statement: " . $conn->error);
 }
 
-if (!$stmt->bind_param("issdss", $_SESSION["user_id"], $farm_name, $location, $farm_size, $irrigation_system, $soil_type)) {
+if (!$stmt->bind_param("issdss", $_SESSION["user_id"], $farm_name, $location, $farm_size, $irrigation_system, $soil_type, $fullname)) {
     die("Error binding parameters: " . $stmt->error);
 }
 
@@ -135,13 +143,14 @@ function test_input($data) {
                     <option value="Mombasa">Mombasa</option>
                     <option value="Kisumu">Kisumu</option>
                     <option value="Trans Nzoia">Trans Nzoia</option>
+                    <option value="Machakos">Machakos</option>
                     <!-- Add more options as needed -->
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="farm_name">Farm Size(in Acres):</label>
-                <input type="text" id="farm_size" name="farm_size" required>
+                <input type="text" id="farm_size" name="farm_size" step="0.001" required>
             </div>
 
             <div class="form-group">

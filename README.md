@@ -14,13 +14,7 @@ The Integrated Yield Prediction Crop Management System is a web-based applicatio
 
 
 
-**Objectives**
-**Main Objective:** To design an integrated yield prediction crop management system.
-**Specific Objectives:**
-- Integrate weather API for real-time and forecasted weather data collection essential for predicting crop yields and providing insights for decision-making.
-- Implement Machine Learning algorithms within the system to forecast crop yields accurately.
-- Systematically collect and store data on various factors influencing crop growth to facilitate effective crop performance monitoring.
-  
+
 **System Design**
 **Frontend**
 **HTML5:** Structure of the web pages.

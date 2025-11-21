@@ -27,9 +27,4 @@ The Integrated Yield Prediction Crop Management System is a web-based applicatio
 **JavaScript:** Additional server-side functionalities.
 **MySQL:** Database management.
 
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
 
-Acknowledgments
-Special thanks to all contributors and collaborators.
-Inspired by advancements in agricultural technology and the need to support smallholder farmers in Kenya.
